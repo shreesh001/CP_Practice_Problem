@@ -84,7 +84,7 @@ void solve() {
         a.push_back({el,i});
     }
     sort(a.begin(),a.end());
-    vector<int>prefix(n+1,0);
+    vector<long long>prefix(n+1,0);
     for (int i=1;i<=n;i++){
         prefix[i]=prefix[i-1]+a[i-1].first;
     }
@@ -101,17 +101,16 @@ void solve() {
             int ind=a[k].second;
             ans[ind]=left+right;
         }
+        i=j-1;
     }
     for (int i=0;i<n;i++){
         cout<<ans[i]<<endl;
     }
     return;
-
 }
 
 // ---------------- MAIN ----------------
 int main() {
-    fastio();
     int t = 1;
     cin >> t; 
     while (t--) solve();

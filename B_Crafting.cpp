@@ -75,14 +75,14 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    cout<<"this is just a checking answer"<<endl;
+    
 }
 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    // cin >> t;  // enable for multiple test cases
+    cin >> t; 
     while (t--) solve();
     return 0;
 }

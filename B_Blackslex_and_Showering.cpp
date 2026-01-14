@@ -85,14 +85,14 @@ void solve() {
     for (int i=1;i<n;i++){
         total+=abs(a[i]-a[i-1]);
     }
-    int ans = total;
+    int ans=total;
     for (int k = 1;k<n-1;k++) {
         int rem =abs(a[k] - a[k - 1]) + abs(a[k + 1] - a[k]);
         int add=abs(a[k + 1] - a[k - 1]);
         ans = min(ans,total-rem+add);
     }
-    ans = min(ans, total - abs(a[1] - a[0]));
-    ans = min(ans, total - abs(a[n - 1] - a[n - 2]));
+    ans = min(ans,total-abs(a[1] -a[0]));
+    ans = min(ans,total-abs(a[n -1]-a[n-2]));
     cout << ans << endl;
 }
 

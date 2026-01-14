@@ -84,18 +84,21 @@ void solve() {
         a.push_back({tm,i+1});
     }
     sort(a.begin(),a.end());
+    reverse(begin(a),end(a));
     long long tottime=0;
-    vector<int>ans(n+1);
+    vector<long long>ans(n+1);
     ans[0]=0;
-    int val=1;
+    long long val=1;
     int ind=0;
     for (int i=1;i<=(n+1)/2;i++){
-        tottime+=(2*val*a[ind].first);
+        tottime+=(1ll*2*val*a[ind].first);
         ans[a[ind].second]=val;
         if (ind+1<n){
              ans[a[ind+1].second]=-val;
-            tottime+=(2*val*a[ind+1].first);
+            tottime+=(1ll*2*val*a[ind+1].first);
         }
+        val++;
+        ind+=2;
     }
     cout<<tottime<<"\n";
     for (int i=0;i<=n;i++){

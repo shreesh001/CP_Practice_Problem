@@ -2,8 +2,6 @@
 using namespace std;
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
 
     int N, K;
     cin >> N >> K;
@@ -12,11 +10,9 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> C[i];
     }
-
-    // Stability array exists but is irrelevant for scoring
     for (int i = 0; i < N; i++) {
         long long tmp;
-        cin >> tmp; // S[i], ignored
+        cin >> tmp;
     }
 
     sort(C.begin(), C.end(), greater<long long>());

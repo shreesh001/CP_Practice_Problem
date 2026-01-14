@@ -1,78 +1,114 @@
+#include <bits/stdc++.h>
 #include <iostream>
-#include <vector>
-#include <numeric>
-#include <cmath>
-#include <algorithm>
-
 using namespace std;
 
-// ---------------------------------------------------------
-// UNIQUE IMPLEMENTATION STRATEGY
-// Instead of using 'prefix' and 'suffix' arrays (which everyone uses),
-// we use a single loop with rolling variables.
-// MOSS/Plagiarism detectors view this as a distinct structural approach.
-// ---------------------------------------------------------
-
 using ll = long long;
+using ld = long double;
 
-void solve_task() {
-    int n;
-    cin >> n;
-    
-    vector<ll> arr(n);
-    ll right_sum = 0;
+// ---------------- TYPE SHORTCUTS ----------------
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
+using vpi = vector<pii>;
+using vpl = vector<pll>;
+using umll = unordered_map<ll,ll>;
+using umii = unordered_map<int,int>;
 
-    // 1. Read input and calculate the sum of everything AFTER the first element
-    //    We assume initially that arr[0] is the remainder, so arr[1...n] are on the right.
-    for (int i = 0; i < n; i++) {
-        cin >> arr[i];
-        if (i > 0) right_sum += arr[i];
-    }
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define fastio() ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    // BASE CASE:
-    // If the first child (arr[0]) is the one left over at the end,
-    // then every other child was picked as "second" and subtracted.
-    ll max_score = -right_sum;
-    
-    // DYNAMIC SWEEP:
-    // We move the "remainder" choice from left to right (index 1 to n-1).
-    // 'left_abs_sum' tracks the best possible sum of elements to the left of our current remainder.
-    ll left_abs_sum = 0;
-    ll head_val = arr[0];
+// ---------------- DEBUG (disabled in judge) ----------------
+#ifndef ONLINE_JUDGE
+    #define debug(x) cerr << #x << " = " << x << "\n";
+    #define debugv(v) cerr << #v << " : "; for(auto &x : v) cerr << x << " "; cerr << "\n";
+#else
+    #define debug(x)
+    #define debugv(v)
+#endif
 
-    for (int i = 1; i < n; i++) {
-        ll current = arr[i];
+// ---------------- MODULAR UTILITIES ----------------
+const ll MOD = 1e9 + 7;
+ll addmod(ll a, ll b) { a %= MOD; b %= MOD; return (a + b + MOD) % MOD; }
+ll mulmod(ll a, ll b) { return (a % MOD) * (b % MOD) % MOD; }
+ll powmod(ll a, ll b) { ll r = 1; while (b) { if (b & 1) r = mulmod(r, a); a = mulmod(a, a); b >>= 1; } return r; }
+ll invmod(ll a) { return powmod(a, MOD - 2); }
 
-        // Step A: The current element is now the remainder, so remove it from 'right_sum'
-        // (It is no longer being subtracted as a 'second child')
-        right_sum -= current;
-
-        // Step B: Calculate the total Score for this specific remainder 'i'
-        // Formula: Head + (Left Absolute Sum) - (Right Sum)
-        ll current_score = head_val + left_abs_sum - right_sum;
-        
-        if (current_score > max_score) {
-            max_score = current_score;
+// ---------------- DISJOINT SET UNION (DSU) ----------------
+struct DSU {
+    vector<int> parent, sz;
+    DSU(int n) { parent.resize(n); sz.assign(n, 1); iota(all(parent), 0); }
+    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+    void merge(int a, int b) {
+        a = find(a); b = find(b);
+        if (a != b) {
+            if (sz[a] < sz[b]) swap(a, b);
+            parent[b] = a;
+            sz[a] += sz[b];
         }
-
-        // Step C: Prepare for the NEXT iteration
-        // The current element will be on the "left" side for any future remainder.
-        // We add its absolute value because we can optimally choose its sign (+/-).
-        left_abs_sum += abs(current);
     }
+};
 
-    cout << max_score << "\n";
+// ---------------- BINARY SEARCH HELPERS ----------------
+template<typename T, typename F>
+T binary_search_first(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo) / 2;
+        if (ok(mid)) hi = mid;
+        else lo = mid + 1;
+    }
+    return lo;
 }
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int t;
-    if (cin >> t) {
-        while (t--) {
-            solve_task();
-        }
+template<typename T, typename F>
+T binary_search_last(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo + 1) / 2;
+        if (ok(mid)) lo = mid;
+        else hi = mid - 1;
     }
+    return lo;
+}
+
+// ---------------- SOLVE FUNCTION ----------------
+void solve() {
+    int n;
+    cin >> n;
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+
+    vector<long long> lsuf(n + 1, 0);
+    for (int i = n - 1; i >= 0; i--) {
+        lsuf[i] = lsuf[i + 1] + a[i];
+    }
+
+    vector<long long> pref(n, 0);
+    long long sum = 0;
+    for (int i = 1; i < n; i++) {
+        sum += llabs(a[i]);
+        pref[i] = sum;
+    }
+    long long ans =-lsuf[1];
+    for (int i = 1;i<n; i++) {
+        long long cur=a[0];
+        if (i > 1) {
+            cur+=pref[i - 1];
+        }
+        cur-=lsuf[i + 1];
+        ans=max(ans,cur);
+    }
+    cout<<ans<<endl;
+}
+
+
+// ---------------- MAIN ----------------
+int main() {
+    fastio();
+    int t = 1;
+    cin >> t; 
+    while (t--) solve();
     return 0;
 }

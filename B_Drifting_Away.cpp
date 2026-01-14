@@ -96,7 +96,6 @@ void solve() {
     else{
         cout<<max(i,n-1-j)<<endl;
     }
-
 }
 
 // ---------------- MAIN ----------------

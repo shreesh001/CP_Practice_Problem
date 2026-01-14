@@ -27,6 +27,5 @@ int main(){
             cout<<ksum[i]<<" ";
         }
         cout<<endl;
-
     }
 }

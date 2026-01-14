@@ -72,29 +72,26 @@ T binary_search_last(T lo, T hi, F ok) {
     }
     return lo;
 }
-void gcd(){
 
-}
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    int n;
-    cin >> n;
-    vector<ll> a(n);
-
-    for (int i = 0; i < n; i++) cin >> a[i];
-
-    ll mn = *min_element(a.begin(), a.end());
-    ll ans = LLONG_MAX;
-
-    for (ll x : a) {
-        if (x != mn) {
-            ans = min(ans, x - mn);
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    ll mini=1e9;
+    for (ll i=0;i<n;i++){
+        cin>>a[i];
+        mini=min(a[i],mini);
+    }
+    ll ans=1e9;
+    for (ll i=0;i<n;i++){
+        if (a[i]!=mini){
+            ans=min(ans,a[i]-mini);
         }
     }
-
-    cout << ans << "\n";
+    ans=max(mini,ans);
+    cout<<ans<<endl;
 }
-
 
 // ---------------- MAIN ----------------
 int main() {

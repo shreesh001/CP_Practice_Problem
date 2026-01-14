@@ -73,31 +73,27 @@ T binary_search_last(T lo, T hi, F ok) {
     return lo;
 }
 
-
+// ---------------- SOLVE ----------------
 void solve() {
     int n;
     cin >> n;
-
     vector<int> a = {1, 0};
-
     for (int k = 2; k <= n; k++) {
         vector<int> b;
         b.reserve(1 << k);
-
         for (int x : a) {
             b.push_back(x * 2 + 1);
         }
-
         for (int i = 0; i < (1 << k); i += 2) {
             b.push_back(i);
         }
-
-        a.swap(b);
+        a=b;
     }
-
     for (int i = 0; i < (int)a.size(); i++) {
-        cout << a[i] << (i + 1 < (int)a.size() ? ' ' : '\n');
+        cout <<a[i]<< " ";
     }
+    cout<<endl;
+    return;
 }
 
 // ---------------- MAIN ----------------

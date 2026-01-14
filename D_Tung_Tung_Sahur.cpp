@@ -79,39 +79,32 @@ void solve() {
     cin >> s >> t;
     int i = 0, j = 0;
     int n = s.size(), m = t.size();
-    
+
     while (i < n && j < m) {
         if (s[i] != t[j]) {
             cout << "NO\n";
             return;
         }
-
         char c = s[i];
-
         int cntS = 0;
         while (i < n && s[i] == c) {
             cntS++;
             i++;
         }
-
         int cntT = 0;
         while (j < m && t[j] == c) {
             cntT++;
             j++;
         }
-
         if (cntT < cntS || cntT > 2 * cntS) {
             cout << "NO\n";
             return;
         }
     }
-
-    // both must end together
     if (i != n || j != m) {
         cout << "NO\n";
         return;
     }
-
     cout << "YES\n";
 }
 

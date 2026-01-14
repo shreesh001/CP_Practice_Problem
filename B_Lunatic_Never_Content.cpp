@@ -87,7 +87,7 @@ void solve() {
     }
     int i=0;
     int j=n-1;
-    int ans=1;
+    int ans=0;
     while (j>i){
         int val=abs(a[i]-a[j]);
         ans=gcd(ans,val);

@@ -122,7 +122,6 @@ void solve() {
 			}
 		}
 		change2 = j - 1;
-
 		// Output the 1-based indices of the subarray
 		cout << change1 + 1 << " " << change2 + 1 << endl;
 	}

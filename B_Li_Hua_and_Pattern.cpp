@@ -90,9 +90,10 @@ void solve() {
             ans=ans+(a[i][j]^b[i][j]);
         }
     }
-    if ((ans/2)<=k){
-        int left=k-(ans/2);
-        if (n%2==0 && left%2==0){
+    ans=ans/2;
+    if ((ans)<=k){
+        int left=k-(ans);
+        if (left%2==0){
             cout<<"YES"<<"\n";
         }
         else if (n%2==1){

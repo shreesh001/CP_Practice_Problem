@@ -78,7 +78,7 @@ void solve() {
     int n,a,b;
     cin>>n>>a>>b;
     int maxi=0;
-    for (int i=0;i<=1000;i++){
+    for (int i=0;i<=5000;i++){
         int ans=(a+i*b)%n;
         maxi=max(ans,maxi);
     }

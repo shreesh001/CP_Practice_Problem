@@ -77,21 +77,18 @@ T binary_search_last(T lo, T hi, F ok) {
 void solve() {
     int n;
     cin>>n;
-    if (n%2==0){
-        if ((n/2)%2==0){
-            cout<<0<<endl;
-            return;
-        }else{
-            cout<<2<<endl;
-            return;
-        }
+    if (n == 2) {
+        cout << 2 << endl;
+        return;
     }
-    int mod=n%3;
-    int teams=n/3;
-    if (teams%2==0){
-        cout<<mod<<endl;
-    }else{
-        cout<<3-mod<<endl;
+    if (n == 3) {
+        cout << 3 << endl;
+        return;
+    }
+    if (n % 2 == 0) {
+        cout << 0 << endl;
+    } else {
+        cout << 1 << endl;
     }
 }
 

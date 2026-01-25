@@ -82,7 +82,7 @@ void solve() {
         ll val=k*k;
         for (int cnt=3;cnt<=63;cnt++) {
             val=val*k;
-            if (val>num) break;
+            if (val>num || val>1e18) break;
             if (cnt>=3 && val==num){
                 cout<<"YES"<<"\n";
                 return;

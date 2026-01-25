@@ -95,7 +95,6 @@ void solve() {
         ll y=vec[i].second;
         ll low=i+1;
         ll high=vec.size();
-
         while(high>=low){
             int mid=(low+high)/2;
             if(vec[mid].first>y){
@@ -104,6 +103,7 @@ void solve() {
                 low=mid+1;
             }
         }
+        if (low>=m) continue;
         ans+=(m-low);
     }
     cout<<ans<<endl;

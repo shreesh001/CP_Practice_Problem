@@ -77,13 +77,13 @@ T binary_search_last(T lo, T hi, F ok) {
 void solve() {
     int n;
     cin>>n;
-    vector<int>a(n);
+    vector<ll>a(n);
     for (int i=0;i<n;i++){
         cin>>a[i];
     }
-    int l=0;
-    int d=0;
-    map<int,int>mpp;
+    ll l=0;
+    ll d=0;
+    map<ll,ll>mpp;
     mpp[0]=1;
     for (int i=0;i<n;i++){
         if (i%2==0){
@@ -91,7 +91,7 @@ void solve() {
         }else{
             d+=a[i];
         }
-        int diff=l-d;
+        ll diff=l-d;
         if (mpp.find(diff)!=mpp.end()){
             cout<<"YES"<<endl;
             return;

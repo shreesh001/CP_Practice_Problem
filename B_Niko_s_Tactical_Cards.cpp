@@ -1,35 +1,105 @@
-#include<bits/stdc++.h>
-#include<iostream>
+#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-int solve(int ind,int n,vector<long long>&a,vector<long long>&b){
-    if (ind>=n) return 0;
-    int k=a[ind];
-    int takea=max(k-solve(ind+1,n,a,b),solve(ind+1,n,a,b)-k);
-    int takeb=0;
-             
-}
-int main(){
-    int tt;
-    cin>>tt;
-    while(tt--){
-        int n;
-        cin>>n;
-        long long k=0;
-        vector<long long>a(n),b(n);
-        for (int i=0;i<n;i++){
-            cin>>a[i];
+
+using ll = long long;
+using ld = long double;
+
+// ---------------- TYPE SHORTCUTS ----------------
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
+using vpi = vector<pii>;
+using vpl = vector<pll>;
+using umll = unordered_map<ll,ll>;
+using umii = unordered_map<int,int>;
+
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define fastio() ios::sync_with_stdio(false); cin.tie(nullptr);
+
+// ---------------- DEBUG (disabled in judge) ----------------
+#ifndef ONLINE_JUDGE
+    #define debug(x) cerr << #x << " = " << x << "\n";
+    #define debugv(v) cerr << #v << " : "; for(auto &x : v) cerr << x << " "; cerr << "\n";
+#else
+    #define debug(x)
+    #define debugv(v)
+#endif
+
+// ---------------- MODULAR UTILITIES ----------------
+const ll MOD = 1e9 + 7;
+ll addmod(ll a, ll b) { a %= MOD; b %= MOD; return (a + b + MOD) % MOD; }
+ll mulmod(ll a, ll b) { return (a % MOD) * (b % MOD) % MOD; }
+ll powmod(ll a, ll b) { ll r = 1; while (b) { if (b & 1) r = mulmod(r, a); a = mulmod(a, a); b >>= 1; } return r; }
+ll invmod(ll a) { return powmod(a, MOD - 2); }
+
+// ---------------- DISJOINT SET UNION (DSU) ----------------
+struct DSU {
+    vector<int> parent, sz;
+    DSU(int n) { parent.resize(n); sz.assign(n, 1); iota(all(parent), 0); }
+    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+    void merge(int a, int b) {
+        a = find(a); b = find(b);
+        if (a != b) {
+            if (sz[a] < sz[b]) swap(a, b);
+            parent[b] = a;
+            sz[a] += sz[b];
         }
-        for (int i=0;i<n;i++){
-            cin>>b[i];
-        }
-        for (int i=0;i<n;i++){
-            if ((k-a[i])>(b[i]-k)){
-                k=k-a[i];
-            }
-            else{
-                k=b[i]-k;
-            }
-        }
-        cout<<k<<endl;
     }
+};
+
+// ---------------- BINARY SEARCH HELPERS ----------------
+template<typename T, typename F>
+T binary_search_first(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo) / 2;
+        if (ok(mid)) hi = mid;
+        else lo = mid + 1;
+    }
+    return lo;
+}
+
+template<typename T, typename F>
+T binary_search_last(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo + 1) / 2;
+        if (ok(mid)) lo = mid;
+        else hi = mid - 1;
+    }
+    return lo;
+}
+
+// ---------------- SOLVE FUNCTION ----------------
+void solve() {
+    int n;
+    cin>>n;
+    vector<ll>a(n),b(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    for (int j=0;j<n;j++) cin>>b[j];
+
+    ll maxi=0,mini=0;
+
+    for (int i=0;i<n;i++){
+        ll newmaxi=max(maxi-a[i],b[i]-mini);
+        ll newmini=min(mini-a[i],b[i]-maxi);
+        maxi=newmaxi;
+        mini=newmini;
+    }
+    cout<<maxi<<endl;
+
+    
+
+}
+
+// ---------------- MAIN ----------------
+int main() {
+    fastio();
+    int t = 1;
+    cin >> t; 
+    while (t--) solve();
+    return 0;
 }

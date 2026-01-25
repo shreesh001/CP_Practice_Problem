@@ -75,12 +75,12 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    int s,n,m;
+    ll s,n,m;
     cin>>s>>n>>m;
     if (n<s){
-        int div=m/n;
-        int mod=m%n;
-        int ans=0;
+        ll div=m/n;
+        ll mod=m%n;
+        ll ans=0;
         if (div%2==1){
              ans=n-mod;
         }else{
@@ -90,8 +90,8 @@ void solve() {
         cout<<ans<<endl;
         return;
     }
-    int mod=m%n;
-    int ans=s-mod;
+    ll mod=m%n;
+    ll ans=s-mod;
     if (ans<0) ans=0;
     cout<<ans<<endl;
     return;

@@ -87,7 +87,6 @@ void solve() {
     int prev=a[0];
     for (int i=1;i<n;i++){
         if (a[i]<prev) a[i]=prev;
-
         prev=a[i];
     }
     while(q--){

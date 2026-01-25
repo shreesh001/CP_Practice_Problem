@@ -89,9 +89,10 @@ int ans(string &s,char ch){
             }else{
                 return -1;
             }
+        }else{
+            i++;
+            j--;
         }
-        i++;
-        j--;
     }
     return an;
 }

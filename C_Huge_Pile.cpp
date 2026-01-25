@@ -98,7 +98,6 @@ void solve() {
         }
         if (mxval == 0) break;
     }
-
     cout << -1 << endl;
 }
 

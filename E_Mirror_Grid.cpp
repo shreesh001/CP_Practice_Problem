@@ -126,24 +126,13 @@ void solve() {
     }
 
     int ans = 0;
-
-    // Loop through unique groups
-    // i loops through layers (rows)
-    // j loops through elements in that layer row (cols)
     for (int i = 0; i < (n + 1) / 2; i++) {
         for (int j = 0; j < n / 2; j++) {
-            
-            // The 4 rotationally symmetric points
             int p1 = a[i][j];
             int p2 = a[j][n - 1 - i];
             int p3 = a[n - 1 - i][n - 1 - j];
             int p4 = a[n - 1 - j][i];
-
             int sum = p1 + p2 + p3 + p4;
-
-            // Cost is simpler: min(ones needed, zeros needed)
-            // If sum is 4, cost is 0. If sum is 3, cost is 1 (change 0 to 1).
-            // Logic: min(sum, 4 - sum)
             ans += min(sum, 4 - sum);
         }
     }

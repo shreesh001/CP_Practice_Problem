@@ -95,11 +95,6 @@ void solve() {
         cout<<0<<endl;
         return;
     }
-    if (s[n-1]==ch){
-        cout<<1<<"\n";
-        cout<<n<<"\n";
-        return;
-    }
     for (int i=n;i>n/2;i--){
         if (s[i-1]==ch){
             cout<<1<<'\n';

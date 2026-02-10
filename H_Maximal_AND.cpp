@@ -80,28 +80,35 @@ void solve() {
     vector<ll>a(n);
     for (int i=0;i<n;i++) cin>>a[i];
     sort(a.begin(),a.end());
-    if (k==0){
-        cout<<a[0]<<"\n";
-        return;
-    }
-    ll time=k/n;
-    if (k>=n){
-        for (int i=0;i<n;i++){
-            for (int j=0;j<min(time,1ll*31);j++){
-                a[i]+=(1<<(30-j));
+    vector<int>bits(31,0);
+    for (int i=0;i<n;i++){
+        int num=a[i];
+        int j=0;
+        while(j<31 && num>=0){
+            int bit=num&1;
+            if (bit==1){
+                bits[j]+=1;
             }
+            j++;
+            num=num>>1;
         }
     }
-    ll left=k%n;
-    for (int i=0;i<left;i++){
-        a[i]+=(1<<(30-time));
+    reverse(bits.begin(),bits.end());
+    for (int i=0;i<31;i++){
+        int need=n-bits[i];
+        if (need<=k){
+            bits[i]+=need;
+            k=k-need;
+        }
+        if (k==0) break;
     }
-    ll ans=a[0];
-    for (int i=1;i<n;i++){
-        ans=min(ans,a[i]);
+    ll ans=0;
+    for (int i=0;i<31;i++){
+        if (bits[i]==n){
+            ans+=1<<(30-i);
+        }
     }
-    cout<<ans<<endl;
-    return;
+    cout<<ans<<"\n";
 }
 
 // ---------------- MAIN ----------------

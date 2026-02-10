@@ -63,5 +63,10 @@
     "generateSymbol": true,
     "convertFormatString": true
   },
-  "chat.disableAIFeatures": true
+  "chat.disableAIFeatures": true,
+  "terminal.integrated.focusAfterRun": "terminal",
+  "notebook.confirmDeleteRunningCell": false,
+  "notebook.consolidatedRunButton": true,
+  "code-runner.runInTerminal": true,
+  "cph.language.cpp.Args": "-std=c++20"
 }

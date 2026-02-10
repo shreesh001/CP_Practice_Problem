@@ -79,6 +79,42 @@ void solve() {
     cin>>n;
     vector<int>a(n);
     for (int i=0;i<n;i++) cin>>a[i];
+    map<int,int>mpp;
+    for (int i=0;i<n;i++){
+        int num=a[i];
+        for (int j=0;j<31;j++){
+            if ((num&1)==1){
+                mpp[j]++;
+            }
+            num=num>>1;
+        }
+    }
+    if (mpp.size()==0){
+        for (int i=1;i<=n;i++){
+            cout<<i<<" ";
+        }
+        cout<<"\n";
+        return;
+    }
+    int g=0;
+    for (auto it:mpp){
+        g=gcd(it.second,g);
+    }
+    vector<int>fact;
+    for (int i=1;i*i<=g;i++){
+        if (g%i==0){
+            fact.push_back(i);
+            if ((g/i)!=i){
+                fact.push_back(g/i);
+            }
+        }
+    }
+    sort(fact.begin(),fact.end());
+    for (int i=0;i<fact.size();i++){
+        cout<<fact[i]<<" ";
+    }
+    cout<<"\n";
+    return;
     
 
 }

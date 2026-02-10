@@ -1,83 +1,113 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <queue>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void solve() {
-    int n;
-    if (!(cin >> n)) return;
+using ll = long long;
+using ld = long double;
 
-    vector<int> a(n);
-    bool has_one = false;
-    vector<int> distinct;
+// ---------------- TYPE SHORTCUTS ----------------
+using pii = pair<int,int>;
+using pll = pair<ll,ll>;
+using vpi = vector<pii>;
+using vpl = vector<pll>;
+using umll = unordered_map<ll,ll>;
+using umii = unordered_map<int,int>;
 
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
+#define mp make_pair
+#define pb push_back
+#define ff first
+#define ss second
+#define all(v) (v).begin(), (v).end()
+#define rall(v) (v).rbegin(), (v).rend()
+#define fastio() ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    // 1. Preprocess: Sort and extract unique numbers > 1
-    sort(a.begin(), a.end());
-    for (int x : a) {
-        if (x == 1) {
-            has_one = true;
-        } else {
-            // Add to distinct if it's the first element or different from the previous
-            if (distinct.empty() || distinct.back() != x) {
-                distinct.push_back(x);
-            }
+// ---------------- DEBUG (disabled in judge) ----------------
+#ifndef ONLINE_JUDGE
+    #define debug(x) cerr << #x << " = " << x << "\n";
+    #define debugv(v) cerr << #v << " : "; for(auto &x : v) cerr << x << " "; cerr << "\n";
+#else
+    #define debug(x)
+    #define debugv(v)
+#endif
+
+// ---------------- MODULAR UTILITIES ----------------
+const ll MOD = 1e9 + 7;
+ll addmod(ll a, ll b) { a %= MOD; b %= MOD; return (a + b + MOD) % MOD; }
+ll mulmod(ll a, ll b) { return (a % MOD) * (b % MOD) % MOD; }
+ll powmod(ll a, ll b) { ll r = 1; while (b) { if (b & 1) r = mulmod(r, a); a = mulmod(a, a); b >>= 1; } return r; }
+ll invmod(ll a) { return powmod(a, MOD - 2); }
+
+// ---------------- DISJOINT SET UNION (DSU) ----------------
+struct DSU {
+    vector<int> parent, sz;
+    DSU(int n) { parent.resize(n); sz.assign(n, 1); iota(all(parent), 0); }
+    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+    void merge(int a, int b) {
+        a = find(a); b = find(b);
+        if (a != b) {
+            if (sz[a] < sz[b]) swap(a, b);
+            parent[b] = a;
+            sz[a] += sz[b];
         }
     }
+};
 
-    // 2. BFS Initialization
-    // dist[i] stores min elements to reach product i. -1 means unreachable.
-    vector<int> dist(n + 1, -1);
-    queue<int> q;
-
-    // Start from multiplicative identity
-    dist[1] = 0;
-    q.push(1);
-
-    // 3. Run BFS
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-
-        for (int v : distinct) {
-            long long prod = (long long)u * v;
-            
-            // Optimization: If product exceeds n, larger v will also exceed n
-            if (prod > n) break;
-
-            if (dist[(int)prod] == -1) {
-                dist[(int)prod] = dist[u] + 1;
-                q.push((int)prod);
-            }
-        }
+// ---------------- BINARY SEARCH HELPERS ----------------
+template<typename T, typename F>
+T binary_search_first(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo) / 2;
+        if (ok(mid)) hi = mid;
+        else lo = mid + 1;
     }
-
-    // 4. Output Results
-    for (int i = 1; i <= n; i++) {
-        if (i == 1) {
-            // Special rule: must select at least one element
-            cout << (has_one ? 1 : -1) << " ";
-        } else {
-            cout << dist[i] << " ";
-        }
-    }
-    cout << "\n";
+    return lo;
 }
 
-int main() {
-    // Fast I/O
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int t;
-    cin >> t;
-    while (t--) {
-        solve();
+template<typename T, typename F>
+T binary_search_last(T lo, T hi, F ok) {
+    while (lo < hi) {
+        T mid = lo + (hi - lo + 1) / 2;
+        if (ok(mid)) lo = mid;
+        else hi = mid - 1;
     }
+    return lo;
+}
+
+// ---------------- SOLVE FUNCTION ----------------
+void solve() {
+    int n;
+    cin>>n;
+    vector<int>a(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    
+    vector<int>dp(n+1,1e9);
+    for (int i=0;i<n;i++){
+        dp[a[i]]=1;
+    }
+    for (int i=1;i<=n;i++){
+        for (int j=1;j*j<=n;j++){
+            if (i%j==0){
+                if (dp[j]==1){
+                    dp[i]=min(dp[i],1+dp[i/j]);
+                }
+                if (dp[i/j]==1){
+                    dp[i]=min(dp[i],1+dp[j]);
+                }
+            }
+        }
+    }
+    for (int i=1;i<=n;i++){
+        if (dp[i]==1e9) cout<<-1<<" ";
+        else cout<<dp[i]<<" ";
+    }
+    cout<<"\n";
+    return;
+}
+
+// ---------------- MAIN ----------------
+int main() {
+    fastio();
+    int t = 1;
+    cin >> t; 
+    while (t--) solve();
     return 0;
 }

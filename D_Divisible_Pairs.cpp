@@ -80,24 +80,22 @@ void solve() {
     vector<int>a(n);
     for (int i=0;i<n;i++) cin>>a[i];
 
-    map<int,vector<int> > mpp1;
-    int pair=0;
+    map<pair<int,int>,ll> mpp;
+    ll ans=0;
     for (int i=0;i<n;i++){
-        int el=a[i];
-        int need1=x-(el%x);
-        if (need1==x) need1=0;
-        if (mpp1.find(need1)!=mpp1.end()){
-            for (int j=0;j<mpp1[need1].size();j++){
-                int need2=a[mpp1[need1][j]]%y;
-                if ((need2-(el%y))%y==0){
-                    pair++;
-                }
-            }
-        }
-        mpp1[el%x].push_back(i);
-    }
-    cout<<pair<<endl;
+        int div_x=a[i]%x;
+        int div_y=a[i]%y;
 
+        int t_x=(x-div_x)%x;
+        int t_y=div_y;
+
+        if (mpp.find({t_x,t_y})!=mpp.end()){
+            ans+=mpp[{t_x,t_y}];
+        }
+        mpp[{div_x,div_y}]++;
+    }
+    cout<<ans<<"\n";
+    return;
 }
 
 // ---------------- MAIN ----------------

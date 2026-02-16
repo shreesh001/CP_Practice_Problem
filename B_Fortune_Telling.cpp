@@ -74,85 +74,33 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
 void solve() {
-    int n;
-    cin>>n;
-    string s;
-    cin>>s;
-    int cnt1=0,cnt2=0;
+    ll n,x,y;
+    cin>>n>>x>>y;
+
+    vector<ll>a(n);
+    ll even=0;
+    ll odd=0;
     for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
-        }
+        cin>>a[i];
+        if (a[i]%2==0) even++;
+        else odd++;
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
-        return;
-    }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
+    int parity=0;
+    if (odd%2==1) parity=1;
+    int initial=0,target=0;
+    if (x%2==1) initial=1;
+    if (y%2==1) target=1;
 
-
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
-        }
+    if ((initial==target && parity==0) || (initial!=target && parity==1)){
+        cout<<"Alice"<<"\n";
+    }else{
+        cout<<"Bob"<<"\n";
     }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
-
-
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
-        }
-    }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
+    return;
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;

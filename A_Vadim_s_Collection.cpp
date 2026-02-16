@@ -74,85 +74,43 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
 void solve() {
-    int n;
-    cin>>n;
     string s;
     cin>>s;
-    int cnt1=0,cnt2=0;
-    for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
+
+    map<int,int>mpp;
+
+    for (int i=0;i<s.size();i++){
+        auto num=s[i]-'0';
+        mpp[num]++;
+    }
+    string ans="";
+    int ind=1;
+    for (int i=9;i>=0;i--){
+        if (mpp.find(i)!=mpp.end()){
+            ans+=('0'+i);
+            mpp[i]--;
+            if (mpp[i]==0) mpp.erase(mpp.find(i));
+            ind++;
+        }
+        else break;
+    }
+    for (;ind<=10;ind++){
+        for (int i=0;i<=9;i++){
+            if (mpp.find(i)!=mpp.end() && i>=(10-ind)){
+                ans+=('0'+i);
+                mpp[i]--;
+                if (mpp[i]==0) mpp.erase(mpp.find(i));
+                break;
+            }
         }
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
-        return;
-    }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
-        }
-    }
+    cout<<ans<<"\n";
+
     
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
-
-
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
-
-
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
-        }
-    }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;

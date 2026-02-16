@@ -74,85 +74,27 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
 void solve() {
     int n;
     cin>>n;
-    string s;
-    cin>>s;
-    int cnt1=0,cnt2=0;
-    for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
+    int flag=0;
+    for (int i=1;i<=n;i++){
+        int x;
+        cin>>x;
+        if (x/(x&(-x)) !=i/(i&(-i))){
+            flag=1;
         }
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
+
+    if (flag==1){
+        cout<<"NO"<<"\n";
         return;
     }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
-
-
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
-
-
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
-        }
-    }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
+    cout<<"YES"<<"\n";
+    return;
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;

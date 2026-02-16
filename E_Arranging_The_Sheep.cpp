@@ -74,85 +74,40 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
+ll steps(int srt,vector<int>&ind){
+    ll total=0;
+    int diff=ind[srt];
+    for (int i=srt-1;i>=0;i--){
+        total+=(diff-ind[i]-1);
+        diff-=1;
+    }
+    diff=ind[srt];
+    for (int i=srt+1;i<ind.size();i++){
+        total+=(ind[i]-diff-1);
+        diff+=1;
+    }
+    return total;
+}
 void solve() {
-    int n;
+    ll n;
     cin>>n;
     string s;
     cin>>s;
-    int cnt1=0,cnt2=0;
+    vector<int>ind;
     for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
-        }
+        if (s[i]=='*') ind.push_back(i);
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
+    if (ind.size()<=1){
+        cout<<0<<"\n";
         return;
     }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
-
-
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
-        }
-    }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
-
-
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
-        }
-    }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
+    int srt=ind.size()/2;
+    ll ans1=steps(srt,ind);
+    ll ans2=steps(srt-1,ind);
+    cout<<min(ans1,ans2)<<"\n";
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;

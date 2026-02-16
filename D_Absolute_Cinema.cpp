@@ -74,85 +74,53 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
 void solve() {
     int n;
-    cin>>n;
-    string s;
-    cin>>s;
-    int cnt1=0,cnt2=0;
-    for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
-        }
+    cin >> n;
+    vector<long long> f(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> f[i];
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
+
+    if (n == 2) {
+        cout << f[1] << " " << f[0] << "\n";
         return;
     }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
-        }
+
+    vector<long long> a(n);
+    for (int i = 1; i < n - 1; ++i) {
+        a[i] = (f[i - 1] + f[i + 1] - 2 * f[i]) / 2;
+    }
+
+    // 2. Solve for a[n] (0-indexed: a[n-1])
+    // f(1) = sum_{j=2}^n a_j * (j-1)
+    // f[0] = sum_{j=1}^{n-1} a[j] * j  (using 0-based index for a, so a_j is a[j-1])
+    // actually, let's stick to 1-based logic for the sum calculation to avoid confusion
+    // f(1) = a_2 * 1 + a_3 * 2 + ... + a_{n-1} * (n-2) + a_n * (n-1)
+    
+    long long current_sum = 0;
+    for (int i = 1; i < n - 1; ++i) { // i is 0-based index in array 'a', corresponds to a_{i+1}
+        current_sum += a[i] * i; 
     }
     
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
+    // a_n = (f(1) - current_sum) / (n-1)
+    a[n - 1] = (f[0] - current_sum) / (n - 1);
 
+    // 3. Solve for a[1] (0-indexed: a[0])
+    // f(n) = a_1 * (n-1) + a_2 * (n-2) + ...
+    long long current_sum_rev = 0;
+    for (int i = 1; i < n; ++i) {
+        current_sum_rev += a[i] * (n - 1 - i);
+    }
+    a[0] = (f[n - 1] - current_sum_rev) / (n - 1);
 
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
-        }
+    for (int i = 0; i < n; ++i) {
+        cout << a[i] << (i == n - 1 ? "" : " ");
     }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
-
-
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
-        }
-    }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
+    cout << "\n";
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;

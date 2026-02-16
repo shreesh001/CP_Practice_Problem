@@ -74,89 +74,56 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-
 void solve() {
-    int n;
-    cin>>n;
-    string s;
-    cin>>s;
-    int cnt1=0,cnt2=0;
+    int n,m;
+    cin>>n>>m;
+    ll color=0;
+    vector<vector<ll>>mat(n,vector<ll>(m,0));
     for (int i=0;i<n;i++){
-        if (s[i]=='(') cnt1++;
-        else{
-            cnt2++;
+        for (int j=0;j<m;j++){
+            cin>>mat[i][j];
+            color=max(color,mat[i][j]);
         }
     }
-    if (n%2==1 || cnt1!=cnt2){
-        cout<<-1<<"\n";
-        return;
-    }
-    stack<pair<char,int>>st;
-    vector<int>ans(n,0),ans2(n,0);
-    int flag=1;
-    int use=0;
+    vector<vector<ll>>ax(color+1);
+    vector<vector<ll>>ay(color+1);
+
     for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans[i]=flag;
-            ans[it.second]=flag;
-        }else{
-            st.push({s[i],i});
+        for (int j=0;j<m;j++){
+            ax[mat[i][j]].push_back(i);
+            ay[mat[i][j]].push_back(j);
         }
     }
-    
-    while(!st.empty()){
-        if (use==1) flag=2;
-        auto it=st.top(); 
-        st.pop();
-        ans[it.second]=flag;
-    }
 
-
-    reverse(s.begin(),s.end());
-    int flag2=1;
-    use=0;
-    for (int i=0;i<n;i++){
-        if (s[i]==')' && !st.empty() && st.top().first=='('){
-            use=1;
-            auto it=st.top();
-            st.pop();
-            ans2[i]=flag2;
-            ans2[it.second]=flag2;
-        }else{
-            st.push({s[i],i});
+    ll ans=0;
+    for (int i=1;i<ax.size();i++){
+        sort(ax[i].begin(),ax[i].end());  // reverse sort also can be done
+        ll k=ax[i].size()-1;
+        ll val=0;
+        for (int j=0;j<ax[i].size();j++){
+            val+=k*ax[i][j];
+            k-=2;
         }
-    }
-    while(!st.empty()){
-        if (use==1) flag2=2;
-        auto it=st.top(); 
-        st.pop();
-        ans2[it.second]=flag2;
-    }
+        ans+=val;
 
 
-    if (flag2<flag){
-        cout<<flag2<<"\n";
-        for (int i=0;i<n;i++){
-            cout<<ans2[i]<<" ";
+        sort(ay[i].begin(),ay[i].end());
+        k=ay[i].size()-1;
+        val=0;
+        for (int j=0;j<ay[i].size();j++){
+            val+=k*ay[i][j];
+            k-=2;
         }
+        ans+=val;
     }
-    else{
-        cout<<flag<<"\n";
-        for (int i=0;i<n;i++){
-        cout<<ans[i]<<" ";
-        }
-    }
-    cout<<"\n";
+    cout<<abs(ans)<<"\n";
 }
 
-
+// ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

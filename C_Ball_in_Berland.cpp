@@ -75,35 +75,27 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    int n;
-    cin >> n;
-    vector<long long> f(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> f[i];
+    ll n,m,k;
+    cin>>n>>m>>k;
+    vector<ll>a(k),b(k);
+    for (int i=0;i<k;i++) cin>>a[i];
+    for (int i=0;i<k;i++) cin>>b[i];
+    
+    ll ans=0;
+    map<ll,ll>ma,mb;
+    ma[a[k-1]]+=1;
+    mb[b[k-1]]+=1;
+    for (int i=k-2;i>=0;i--){
+        ll boy=a[i];
+        ll girl=b[i];
+        ll rem=0;
+        if (ma.find(boy)!=ma.end()) rem+=ma[boy];
+        if (mb.find(girl)!=mb.end()) rem+=mb[girl];
+        ans+=(k-1-i-rem);
+        ma[boy]+=1;
+        mb[girl]+=1;
     }
-    if (n == 2) {
-        cout << f[1] << " " << f[0] << "\n";
-        return;
-    }
-    vector<long long> a(n);
-    for (int i = 1; i < n - 1; ++i) {
-        a[i] = (f[i - 1] + f[i + 1] - 2 * f[i]) / 2;
-    }
-
-    long long current_sum = 0;
-    for (int i = 1; i < n - 1; ++i) {
-        current_sum += a[i] * i; 
-    }
-    a[n - 1] = (f[0] - current_sum) / (n - 1);
-    long long current_sum_rev = 0;
-    for (int i = 1; i < n; ++i) {
-        current_sum_rev += a[i] * (n - 1 - i);
-    }
-    a[0] = (f[n - 1] - current_sum_rev) / (n - 1);
-    for (int i = 0; i < n; ++i) {
-        cout << a[i] << " ";
-    }
-    cout << "\n";
+    cout<<ans<<"\n";
 }
 
 // ---------------- MAIN ----------------

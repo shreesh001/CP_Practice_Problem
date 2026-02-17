@@ -74,20 +74,52 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
+vector<ll>edges,result;
+ll mod=1e9+7;
+int dfs(vector<vector<ll>>&adj,ll node,ll parent){
+    ll ed=0;
+    for (auto adjnode:adj[node]){
+        if (adjnode!=parent){
+            ed+=dfs(adj,adjnode,node);
+        } 
+    }
+    edges[node]=ed;
+    return ed+1;
+}
+
+void solvedfs(vector<vector<ll>>&adj,ll node,ll parent){
+    result[node]=(1+result[parent]+2*(edges[node]))%mod;
+    for (auto adjnode:adj[node]){
+        if (adjnode!=parent){
+            solvedfs(adj,adjnode,node);
+        }
+    }
+    return;
+}
+
 void solve() {
-    int n;
+    ll n;
     cin>>n;
-    vector<vector<int>>adj(n+1);
+    vector<vector<ll>>adj(n+1);
+    edges.resize(n+1,0);
+    result.resize(n+1,0);
     adj[0].push_back(1);
     for (int i=1;i<=n;i++){
-        int u,v;
+        ll u,v;
         cin>>u>>v;
         if (u!=0){
             adj[i].push_back(u);
             adj[i].push_back(v);
         }
     }
-    
+    dfs(adj,1,0);
+    solvedfs(adj,1,0);
+
+    for (int i=1;i<=n;i++){
+        cout<<result[i]<<" ";
+    }
+    cout<<"\n";
+    return;
 }
 
 // ---------------- MAIN ----------------

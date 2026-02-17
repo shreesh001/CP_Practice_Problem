@@ -74,36 +74,18 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-void solve() {
-    int n;
-    cin >> n;
-    vector<long long> f(n);
-    for (int i = 0; i < n; ++i) {
-        cin >> f[i];
-    }
-    if (n == 2) {
-        cout << f[1] << " " << f[0] << "\n";
-        return;
-    }
-    vector<long long> a(n);
-    for (int i = 1; i < n - 1; ++i) {
-        a[i] = (f[i - 1] + f[i + 1] - 2 * f[i]) / 2;
-    }
+ll powll(ll i){
 
-    long long current_sum = 0;
-    for (int i = 1; i < n - 1; ++i) {
-        current_sum += a[i] * i; 
+}
+void solve() {
+    ll n;
+    cin>>n;
+    ll res=0;
+    for (ll i=0;i<64;i++){
+        ll div=1ll<<i;
+        res+=n/div;
     }
-    a[n - 1] = (f[0] - current_sum) / (n - 1);
-    long long current_sum_rev = 0;
-    for (int i = 1; i < n; ++i) {
-        current_sum_rev += a[i] * (n - 1 - i);
-    }
-    a[0] = (f[n - 1] - current_sum_rev) / (n - 1);
-    for (int i = 0; i < n; ++i) {
-        cout << a[i] << " ";
-    }
-    cout << "\n";
+    cout<<res<<"\n";
 }
 
 // ---------------- MAIN ----------------

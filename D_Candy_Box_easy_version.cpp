@@ -75,30 +75,31 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
-        else{
-            st.insert({b,a});
-        }
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    map<ll,ll>mpp;
+    for (int i=0;i<n;i++) {
+        cin>>a[i];
+        mpp[a[i]]++;
+    }
+    vector<ll>freq(n+1,0);
+    for (auto &[ty,fq]:mpp){
+        freq[fq]++;
     }
     ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
+    ll val=n;
+    for (int i=n;i>=1;i--){
+        if (val==i && freq[i]==0){
+            val--;
         }
+        else if (freq[i]>=1){
+            ll l=val-freq[i]+1;
+            ans+=(val-l+1)*(l+val)/2;
+            val=l-1;
+        }
+        if (val==0) break;
     }
-    ans+=(cnt*(cnt+1))/2;
     cout<<ans<<"\n";
 }
 

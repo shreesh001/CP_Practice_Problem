@@ -73,33 +73,31 @@ T binary_search_last(T lo, T hi, F ok) {
     return lo;
 }
 
-// ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
-        else{
-            st.insert({b,a});
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
+
+    // If n is odd, the first character MUST be 'a'.
+    if (n % 2 == 1 && s[0] == 'b') {
+        cout << "NO\n";
+        return;
+    }
+
+    // Determine where to start checking pairs
+    int start_idx = (n % 2 == 1) ? 1 : 0;
+    
+    // Check each pair. They must be different characters.
+    for (int i = start_idx; i < n; i += 2) {
+        // If both characters in a pair are explicitly the same (and not '?'), it's invalid.
+        if (s[i] != '?' && s[i+1] != '?' && s[i] == s[i+1]) {
+            cout << "NO\n";
+            return;
         }
     }
-    ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
-        }
-    }
-    ans+=(cnt*(cnt+1))/2;
-    cout<<ans<<"\n";
+
+    cout << "YES\n";
 }
 
 // ---------------- MAIN ----------------

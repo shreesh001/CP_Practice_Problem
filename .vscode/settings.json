@@ -68,5 +68,6 @@
   "notebook.confirmDeleteRunningCell": false,
   "notebook.consolidatedRunButton": true,
   "code-runner.runInTerminal": true,
-  "cph.language.cpp.Args": "-std=c++20"
+  "cph.language.cpp.Args": "-std=c++20",
+  "debug.onTaskErrors": "showErrors"
 }

@@ -75,31 +75,31 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
-        else{
-            st.insert({b,a});
-        }
+    ll n,dest;
+    cin>>n>>dest;
+    vector<ll>a(n),b(n),c(n);
+    for (int i=0;i<n;i++) {
+        cin>>a[i];
+        cin>>b[i];
+        cin>>c[i];
     }
-    ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
-        }
+
+    ll srt=0;
+    ll maxi=-1e15;
+    for (int i=0;i<n;i++){
+        maxi=max(maxi,(a[i]*b[i])-c[i]);
+        srt+=a[i]*(b[i]-1);
     }
-    ans+=(cnt*(cnt+1))/2;
-    cout<<ans<<"\n";
+
+    if (dest-srt<=0){
+        cout<<0<<"\n";
+        return;
+    }
+    if (maxi<=0){
+        cout<<-1<<"\n";
+        return;
+    }
+    cout<<(dest-srt+maxi-1)/maxi<<"\n";
 }
 
 // ---------------- MAIN ----------------

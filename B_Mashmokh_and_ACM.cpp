@@ -74,31 +74,18 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
+int solvedp(int i,int len,int n,int k){
+    if (i>n) return 0;
+    if (len==k) return 1;
+
+    int nottake=solvedp(i+1,len,n,k);
+    int take1=solvedp(i,len+1,n,k);
+    return take1+nottake;
+}
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
-        else{
-            st.insert({b,a});
-        }
-    }
-    ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
-        }
-    }
-    ans+=(cnt*(cnt+1))/2;
+    int n,k;
+    cin>>n>>k;
+    int ans=solvedp(1,0,n,k);
     cout<<ans<<"\n";
 }
 
@@ -106,7 +93,7 @@ void solve() {
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

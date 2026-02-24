@@ -74,31 +74,29 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
+ll solvedp(int ind,int type,vector<ll>&a,vector<ll>&b,vector<vector<ll>>&dp){
+    int n=a.size();
+    if (ind==n) return 0;
+    if (dp[ind][type]!=-1) return dp[ind][type];
+    ll nottake=solvedp(ind+1,type,a,b,dp);
+    ll take1=0;
+    ll take2=0;
+    if (type!=1){
+        take1=a[ind]+solvedp(ind+1,1,a,b,dp);
+    }
+    if (type!=2){
+        take2=b[ind]+solvedp(ind+1,2,a,b,dp);
+    }
+    return dp[ind][type]=max({nottake,take1,take2});
+}
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
-        else{
-            st.insert({b,a});
-        }
-    }
-    ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
-        }
-    }
-    ans+=(cnt*(cnt+1))/2;
+    ll n;
+    cin>>n;
+    vector<ll>a(n),b(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    for (int i=0;i<n;i++) cin>>b[i];
+    vector<vector<ll>>dp(n,vector<ll>(3,-1));
+    ll ans=solvedp(0,0,a,b,dp);
     cout<<ans<<"\n";
 }
 
@@ -106,7 +104,7 @@ void solve() {
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

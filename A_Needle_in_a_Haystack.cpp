@@ -75,31 +75,39 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    set<pair<int,int>>st;
-    for (int i=0;i<m;i++){
-        int a,b;
-        cin>>a>>b;
-        if (a<b){
-            st.insert({a,b});
-        }
+    string s,t;
+    cin>>s>>t;
+    map<char,int>mpp1,mpp2;
+
+    for (int i=0;i<s.size();i++){
+        mpp2[s[i]]++;
+    }
+    for (int i=0;i<t.size();i++){
+        mpp1[t[i]]++;
+    }
+
+    for (int i=0;i<s.size();i++){
+        if (mpp1[s[i]]>=mpp2[s[i]]) continue;
         else{
-            st.insert({b,a});
+            cout<<"Impossible"<<"\n";
+            return;
         }
     }
-    ll ans=0;
-    ll cnt=1;
-    for (int i=2;i<=n;i++){
-        if (st.find({i-1,i})!=st.end()){
-            ans+=(cnt*(cnt+1))/2;
-            cnt=1;
-        }else{
-            cnt+=1;
+    int pos=0;
+    string res="";
+    for (auto [ch,cnt]:mpp1){
+        if (pos<s.size() && ch>=s[pos]){
+            while(pos<s.size() && ch>=s[pos]){
+                res+=s[pos];
+                pos++;
+            }
+        }
+        for (int j=1;j<=(cnt-mpp2[ch]);j++){
+            res+=ch;
         }
     }
-    ans+=(cnt*(cnt+1))/2;
-    cout<<ans<<"\n";
+    cout<<res<<"\n";
+
 }
 
 // ---------------- MAIN ----------------

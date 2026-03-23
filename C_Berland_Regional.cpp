@@ -75,7 +75,42 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    
+    ll n;
+    cin>>n;
+    vector<ll>a(n),b(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    for (int i=0;i<n;i++) cin>>b[i];
+
+    vector<vector<ll>> mpp(n);
+    for (int i=0;i<n;i++){
+        mpp[a[i]-1].push_back(b[i]);
+    }
+
+    // sorting and converting into prefix sum
+    for (auto &skillset:mpp){
+        if (skillset.size()==0) continue;
+        sort(skillset.rbegin(),skillset.rend());
+        for (int i=1;i<skillset.size();i++){
+            skillset[i]+=skillset[i-1];
+        }
+    }
+
+    vector<ll> ans(n+1,0);
+    for (int i=1;i<=n;i++){
+        ll Tskill=0;
+        int sz=mpp[i-1].size();
+        for (int j=0;j<sz;j++){
+            ans[j+1]+=mpp[i-1][sz-1];
+            if (sz%(j+1)!=0){
+                ans[j+1]-=(mpp[i-1][sz-1]-mpp[i-1][sz-1-(sz%(j+1))]);
+            }
+        }
+    }
+    for (int i=1;i<=n;i++){
+        cout<<ans[i]<<" ";
+    }
+    cout<<'\n';
+    return;
 }
 
 // ---------------- MAIN ----------------

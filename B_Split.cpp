@@ -83,44 +83,19 @@ void solve() {
         cin>>x;
         mpp[x]++;
     }
-    vector<pair<int,int>>vec;
-    for (auto it:mpp){
-        vec.push_back({it.second,it.first});
+    // x represent odd el which can only represent in one set
+    // y represent even el which can equally divide into the 2 odd parts
+    // z repseent even el which do divide euqlly but evenly
+    int x=0,y=0,z=0;
+    for (auto &[el,cnt]:mpp){
+        if (cnt%2==1) x+=1;
+        else if (cnt%4==2) y+=1;
+        else z+=1;
     }
-    sort(vec.begin(),vec.end());
-    vector<pair<int,int>>occur;
-    int len=0;
-    for (int i=0;i<vec.size();i++){
-        if ((vec[i].first%2)==1){
-            if ((len+vec[i].first)<=n){
-                occur.push_back({vec[i].first,vec[i].second});
-                len+=vec[i].first;
-                vec[i].first=0;
-            }else{
-                occur.push_back({n-len,vec[i].second});
-                vec[i].first-=(n-len);
-                break;
-            }
-        }else{
-            if ((len+vec[i].first-1)<=n){
-                occur.push_back({vec[i].first-1,vec[i].second});
-                len+=(vec[i].first-1);
-                vec[i].first=1;
-            }else{
-                occur.push_back({n-len,vec[i].second});
-                vec[i].first-=(n-len);
-                break;
-            }
-        }
-    }
-    int ans=0;
-    for (int i=0;i<vec.size();i++){
-        if (vec[i].first%2==1) ans++;
-    }
-    for (int i=0;i<occur.size();i++){
-        if (occur[i].first%2==1) ans++;
-    }
-    cout<<ans<<endl;
+
+    ll ans=x+2*y+2*z;
+    if (z%2==1 && x==0) ans-=2;
+    cout<<ans<<"\n";
 }
 
 // ---------------- MAIN ----------------

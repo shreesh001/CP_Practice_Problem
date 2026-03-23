@@ -88,17 +88,18 @@ void solve() {
         freq[fq]++;
     }
     ll ans=0;
-    ll val=n;
+    ll extra=0;
     for (int i=n;i>=1;i--){
-        if (val==i && freq[i]==0){
-            val--;
+        if (freq[i]!=0){
+            ans+=i;
+            extra+=(freq[i]-1);
         }
-        else if (freq[i]>=1){
-            ll l=val-freq[i]+1;
-            ans+=(val-l+1)*(l+val)/2;
-            val=l-1;
+        else{
+            if (extra>0){
+                ans+=i;
+                extra-=1;
+            }
         }
-        if (val==0) break;
     }
     cout<<ans<<"\n";
 }

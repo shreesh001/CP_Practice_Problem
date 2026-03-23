@@ -82,14 +82,16 @@ void solve() {
         cin>>a[i];
         pref[i+1]=pref[i]+a[i];
     }
-    ll max_gain = 0;
-    ll min_prev_val = 0;
-    for (ll r=1;r<=n;r++){
-        ll current_val = (r * r) + r - pref[r];
-        max_gain = max(max_gain, current_val - min_prev_val);
-        min_prev_val = min(min_prev_val, current_val);
+    ll maxleftpart=0;
+    ll diff=0;
+    for (int i=1;i<=n;i++){
+        ll leftpart=-(i*i)+i+pref[i-1];
+        maxleftpart=max(maxleftpart,leftpart);
+        ll rightpart=(i*i)+i-pref[i];
+        diff=max(diff,rightpart+maxleftpart);
     }
-    cout<<pref[n]+max_gain<<"\n";
+    cout<<pref[n]+diff<<endl;
+    
 }
 
 // ---------------- MAIN ----------------

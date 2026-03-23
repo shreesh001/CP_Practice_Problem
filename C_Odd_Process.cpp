@@ -75,11 +75,11 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    int n;
+    ll n;
     cin>>n;
-    vector<int>a(n);
+    vector<ll>a(n);
     for (int i=0;i<n;i++) cin>>a[i];
-    vector<int>even,odd;
+    vector<ll>even,odd;
     for (int i=0;i<n;i++){
         if (a[i]%2==0) even.push_back(a[i]);
         else odd.push_back(a[i]);
@@ -100,44 +100,26 @@ void solve() {
         cout<<endl;
         return;
     }
-
-    int coin=0;
-    int i=0;
-    int j=0;
-    int ans1=0;
-    int ans2=0;
-    int flag=0;
-    for (int k=1;k<=n;k++){
-        if (k==n && odd.size()%2==0){
-            cout<<0<<" ";
-            break;
-        }
-        if (k==1){
-            coin+=odd[i];
-            i++;
-            cout<<coin<<" ";
-        }
-        else {
-            if (j<even.size()){
-                coin+=even[j];
-                if (j==even.size()-2) ans1=coin;
-                if (j==even.size()-1) ans2=coin;
-                j++;
-                cout<<coin<<" ";
-            }
-            else {
-                if (flag==0){
-                    cout<<ans1<<" ";
-                    flag=1;
-                }else{
-                    cout<<ans2<<" ";
-                    flag=0;
-                }
-            }
+    vector<ll>ans(n+1,0);
+    ans[1]=odd[0];
+    ll i=0;
+    while(i<even.size()){
+        ans[i+2]=ans[i+1]+even[i];
+        i++;
+    }
+    ll validlen=i+1;
+    ll oddextra=odd.size()-1;
+    for (int j=i+2;j<=n;j++){
+        int nd=j-validlen;
+        if (nd%2==1) nd+=1;
+        if (oddextra>=nd){
+            ans[j]=ans[j-nd];
         }
     }
-    cout<<endl;
-    return;
+    for (int i=1;i<=n;i++){
+        cout<<ans[i]<<" ";
+    }
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------

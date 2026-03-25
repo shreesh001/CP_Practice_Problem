@@ -75,58 +75,57 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,h,k;
-    cin>>n>>h>>k;
-    vector<ll>a(n),pref(n+1,0);
-    ll sum=0;
-    for (int i=0;i<n;i++) {
+    ll n,m,k;
+    cin>>n>>m>>k;
+    vector<ll>a(n+1);
+    map<ll,vector<ll>>mpp;
+    for (ll i=1;i<=n;i++) {
         cin>>a[i];
-        pref[i+1]=pref[i]+a[i];
-        sum+=a[i];
+        mpp[a[i]].push_back(i);
     }
-    ll reload=(((h+sum-1)/sum)-1)*k;
-    ll bullet=(h/sum)*n;
-    ll total_time=reload+bullet;
-    ll lefthealth=h%sum;
+    vector<vector<ll>>adj(n+1);
+    for (int j=0;j<m;j++){
+        ll u,v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<ll>dist(n+1,1e9);
 
-    if (lefthealth!=0){
-        vector<ll>prefmin(n);
-        vector<ll>suffmax(n);
-        prefmin[0]=a[0];
-        for (int i=1;i<n;i++){
-            prefmin[i]=min(prefmin[i-1],a[i]);
-        }
-        suffmax[n-1]=a[n-1];
-        for (int i=n-2;i>=0;i--){
-            suffmax[i]=max(suffmax[i+1],a[i]);
-        }
-        ll current_pref = 0;
-        for (int r = 1; r <= n; r++) {
-            current_pref += a[r - 1];
-            ll best_damage = current_pref;
-        
-        // Try swapping the smallest bullet fired with the largest bullet unfired
-            if (r < n) {
-            ll mx_increase = suffmax[r] - prefmin[r - 1];
-            if (mx_increase > 0) {
-                best_damage += mx_increase;
+    queue<ll>q;
+    q.push(1);
+    dist[1]=0;
+    while(!q.empty()){
+        ll node=q.front();
+        q.pop();
+        for (auto adjnode:adj[node]){
+            if (dist[adjnode]>dist[node]+1){
+                q.push(adjnode);
+                dist[adjnode]=dist[node]+1;
             }
         }
-        // The moment our optimized damage covers the leftover health, we are done
-        if (best_damage >= lefthealth) {
-            cout << total_time + r << "\n";
-            return;
+    }
+
+    vector<ll>ans(k+1,0);
+    for (auto &it:mpp){
+        ll type = it.first;
+        for (auto node : it.second){
+            if (dist[node] != 1e9){
+                ans[type] = max(ans[type], dist[node]);
+            }
         }
-        }
-    } 
-    cout<<total_time<<"\n";
+    }
+    for (int i=1;i<=k;i++){
+        cout<<ans[i]<<" ";
+    }
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

@@ -75,45 +75,40 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    vector<ll>a(n),b(m),c(m);
-    multiset<ll>mst;
+    ll n;
+    cin>>n;
+    vector<ll>a(n),b(n);
+    int x=0;
     for (int i=0;i<n;i++) {
         cin>>a[i];
-        mst.insert(a[i]);
+        x=x^a[i];
     }
-    for (int i=0;i<m;i++) cin>>b[i];
-    for (int i=0;i<m;i++) cin>>c[i];
+    for (int i=0;i<n;i++) {
+        cin>>b[i];
+        x=x^b[i];
+    }
+    if (x==0){
+        cout<<"Tie"<<"\n";
+        return;
+    }
+    int highbit=0;
+    // most signfincant bit in x
+    for (int i=0;i<n;i++){
+        if (x&(1<<i)) highbit=i;
+    }
 
-    vector<pair<ll,ll>>vec;
-    for (int i=0;i<m;i++){
-        vec.push_back({b[i],c[i]});
+    int ans=-1;
+    for (int i=1;i<=n;i++){
+        if ((a[i-1]^b[i-1])&(1<<highbit)) ans=i;
     }
-    sort(vec.begin(),vec.end());
-    long long kill=0;
-    for (int i=0;i<m;i++){
-        auto [bi,ci]=vec[i];
-        if (ci>0){
-            auto ind=mst.lower_bound(bi);
-            if (ind==mst.end()) break;
-            ll val=*ind;
-            kill+=1;
-            mst.erase(ind);
-            mst.insert(max(val,ci));
-        }
-    }
-    // cout<<kill<<"\n";
-    for (int i=0;i<m;i++){
-        auto [bi,ci]=vec[i];
-        if (ci==0){
-            auto ind=mst.lower_bound(bi);
-            if (ind==mst.end()) break;
-            kill+=1;
-            mst.erase(ind);
-        }
-    }
-    cout<<kill<<"\n";
+    if (ans%2==1) cout<<"Ajisai"<<"\n";
+    else cout<<"Mai"<<"\n";
+
+
+    
+
+
+    
 }
 
 // ---------------- MAIN ----------------

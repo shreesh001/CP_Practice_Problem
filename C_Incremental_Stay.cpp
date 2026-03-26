@@ -75,45 +75,34 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-    vector<ll>a(n),b(m),c(m);
-    multiset<ll>mst;
-    for (int i=0;i<n;i++) {
+    ll n;
+    cin>>n;
+    ll sz=2*n;
+    vector<ll>a(sz);
+    ll tt=0;
+    for (ll i=0;i<sz;i++) {
         cin>>a[i];
-        mst.insert(a[i]);
+        if (i<n) tt-=a[i];
+        else tt+=a[i];
     }
-    for (int i=0;i<m;i++) cin>>b[i];
-    for (int i=0;i<m;i++) cin>>c[i];
-
-    vector<pair<ll,ll>>vec;
-    for (int i=0;i<m;i++){
-        vec.push_back({b[i],c[i]});
+    if (n==1){
+        cout<<tt<<"\n";
+        return;
     }
-    sort(vec.begin(),vec.end());
-    long long kill=0;
-    for (int i=0;i<m;i++){
-        auto [bi,ci]=vec[i];
-        if (ci>0){
-            auto ind=mst.lower_bound(bi);
-            if (ind==mst.end()) break;
-            ll val=*ind;
-            kill+=1;
-            mst.erase(ind);
-            mst.insert(max(val,ci));
-        }
+    vector<ll>time(n,0);
+    time[n-1]=tt;
+    time[n-2]=tt+(1ll*2*a[n-1])-(1ll*2*a[n]);
+    ll diff=3;
+    for (ll i=n-3;i>=0;i--){
+        ll ind=i+1;
+        ll secind=ind+diff;
+        time[i]=time[i+2]+(1ll*2*a[ind])-(1ll*2*a[secind]);
+        diff=diff+2;
     }
-    // cout<<kill<<"\n";
-    for (int i=0;i<m;i++){
-        auto [bi,ci]=vec[i];
-        if (ci==0){
-            auto ind=mst.lower_bound(bi);
-            if (ind==mst.end()) break;
-            kill+=1;
-            mst.erase(ind);
-        }
+    for (ll i=0;i<n;i++){
+        cout<<time[i]<<" ";
     }
-    cout<<kill<<"\n";
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------

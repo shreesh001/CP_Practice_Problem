@@ -89,8 +89,7 @@ void solve() {
         return;
     }
     cout<<"Alice"<<"\n";
-    return;
-    
+    return;  
 }
 
 // ---------------- MAIN ----------------

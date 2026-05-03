@@ -74,8 +74,8 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
-ll solvedp(int ind,int type,vector<ll>&a,vector<ll>&b,vector<vector<ll>>&dp){
-    int n=a.size();
+ll solvedp(ll ind,ll type,vector<ll>&a,vector<ll>&b,vector<vector<ll>>&dp){
+    ll n=a.size();
     if (ind==n) return 0;
     if (dp[ind][type]!=-1) return dp[ind][type];
     ll nottake=solvedp(ind+1,type,a,b,dp);

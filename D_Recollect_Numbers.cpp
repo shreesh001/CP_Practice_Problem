@@ -1,4 +1,3 @@
-#pragma GCC optimize("O3,unroll-loops")
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -7,7 +6,6 @@
 
 using namespace std;
 
-// Fast custom hash function for vector<int> to track visited states instantly
 struct VectorHash {
     size_t operator()(const vector<int>& v) const {
         size_t seed = v.size();
@@ -21,7 +19,6 @@ struct VectorHash {
 int get_ans(int N, vector<int> P) {
     if (N <= 1) return 0;
 
-    // 1. Generate all prime numbers <= N
     vector<int> primes;
     vector<bool> is_prime(N + 1, true);
     is_prime[0] = is_prime[1] = false;

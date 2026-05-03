@@ -73,64 +73,72 @@ T binary_search_last(T lo, T hi, F ok) {
     return lo;
 }
 
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-void fastio() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-}
-
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    int n, k, q;
-    cin >> n >> k >> q;
-
-    // Track which indices are covered by which type of queries
-    vector<bool> type1(n + 1, false);
-    vector<bool> type2(n + 1, false);
-
-    for (int i = 0; i < q; i++) {
-        int c, l, r;
-        cin >> c >> l >> r;
-        if (c == 1) {
-            for (int j = l; j <= r; j++) type1[j] = true;
-        } else {
-            for (int j = l; j <= r; j++) type2[j] = true;
-        }
-    }
-
-    vector<int> ans(n + 1, 1e9);
-    int cycle_val = 0;
-
-    for (int i = 1; i <= n; i++) {
-        if (type1[i]) {
-            // If it's in a Type 1 constraint, it must be >= k
-            if (type2[i]) {
-                // If it's also in Type 2, it CANNOT be k. Set it higher.
-                ans[i] = 1e9; 
-            } else {
-                // Safe to use as the minimum for Type 1
-                ans[i] = k;   
+    int n,k,q;
+    cin>>n>>k>>q;
+    vector<vector<int>>query;
+    vector<int>ans(n+1,1e9);
+    int l1=-1;
+    int r1=-1;
+    for (int i=0;i<q;i++){
+        int c,l,r;
+        cin>>c>>l>>r;
+        if (c==1){
+            if (l1==-1){
+                l1=l;r1=r;
             }
-        } else {
-            // Not restricted by Type 1, so use it to feed the MEX requirement
-            ans[i] = cycle_val % k;
-            cycle_val++;
+            else{
+                l1=min(l1,l);
+                r1=max(r1,r);
+            }
+        }else{
+            query.push_back({l,r});
+        }
+
+    }
+
+    for (int i=l1;i<=r1;i++){
+        ans[i]=k;
+    }
+
+    for (int i=0;i<query.size();i++){
+        int lf=query[i][0];
+        int rt=query[i][1];
+        //present number
+        vector<int>present(k,0);
+        vector<int>absent;
+        for (int j=lf;j<=rt;j++){
+            if (ans[j]<k) present[ans[j]]=1;
+        }
+        for (int j=0;j<k;j++){
+            if (present[j]==0) absent.push_back(j);
+        }
+        int sz=0;
+        for (int j=lf;j<=rt;j++){
+            if (ans[j]==k){
+                ans[j]=1e9;
+                continue;
+            }
+
+            else if (ans[j]<k) continue;
+            else if (sz==absent.size()){
+                ans[j]=absent[sz];
+                sz++;
+                break;
+            }
         }
     }
 
-    // Output the array
-    for (int i = 1; i <= n; i++) {
-        cout << ans[i] << " ";
+    for (int i=1;i<=n;i++){
+        cout<<ans[i]<<" ";
     }
-    cout << "\n";
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------
 int main() {
+    fastio();
     int t = 1;
     cin >> t; 
     while (t--) solve();

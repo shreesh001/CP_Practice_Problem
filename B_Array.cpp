@@ -1,102 +1,96 @@
-#include <bits/stdc++.h>
+#pragma GCC optimize("O3,unroll-loops")
 #include <iostream>
+#include <vector>
+#include <string>
+
 using namespace std;
 
-using ll = long long;
-using ld = long double;
-
-// ---------------- TYPE SHORTCUTS ----------------
-using pii = pair<int,int>;
-using pll = pair<ll,ll>;
-using vpi = vector<pii>;
-using vpl = vector<pll>;
-using umll = unordered_map<ll,ll>;
-using umii = unordered_map<int,int>;
-
-#define mp make_pair
-#define pb push_back
-#define ff first
-#define ss second
-#define all(v) (v).begin(), (v).end()
-#define rall(v) (v).rbegin(), (v).rend()
-#define fastio() ios::sync_with_stdio(false); cin.tie(nullptr);
-
-// ---------------- DEBUG (disabled in judge) ----------------
-#ifndef ONLINE_JUDGE
-    #define debug(x) cerr << #x << " = " << x << "\n";
-    #define debugv(v) cerr << #v << " : "; for(auto &x : v) cerr << x << " "; cerr << "\n";
-#else
-    #define debug(x)
-    #define debugv(v)
-#endif
-
-// ---------------- MODULAR UTILITIES ----------------
-const ll MOD = 1e9 + 7;
-ll addmod(ll a, ll b) { a %= MOD; b %= MOD; return (a + b + MOD) % MOD; }
-ll mulmod(ll a, ll b) { return (a % MOD) * (b % MOD) % MOD; }
-ll powmod(ll a, ll b) { ll r = 1; while (b) { if (b & 1) r = mulmod(r, a); a = mulmod(a, a); b >>= 1; } return r; }
-ll invmod(ll a) { return powmod(a, MOD - 2); }
-
-// ---------------- DISJOINT SET UNION (DSU) ----------------
-struct DSU {
-    vector<int> parent, sz;
-    DSU(int n) { parent.resize(n); sz.assign(n, 1); iota(all(parent), 0); }
-    int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
-    void merge(int a, int b) {
-        a = find(a); b = find(b);
-        if (a != b) {
-            if (sz[a] < sz[b]) swap(a, b);
-            parent[b] = a;
-            sz[a] += sz[b];
+/*
+ * Optimized O(N) solution to find valid robot configurations.
+ */
+int getValidConfigurations(vector<int> coordinationThreshold) {
+    long long n = coordinationThreshold.size();
+    
+    // Frequency array to count occurrences of each threshold
+    vector<long long> count(n + 1, 0);
+    for (long long t : coordinationThreshold) {
+        if (t <= n) {
+            count[t]++;
         }
     }
-};
-
-// ---------------- BINARY SEARCH HELPERS ----------------
-template<typename T, typename F>
-T binary_search_first(T lo, T hi, F ok) {
-    while (lo < hi) {
-        T mid = lo + (hi - lo) / 2;
-        if (ok(mid)) hi = mid;
-        else lo = mid + 1;
-    }
-    return lo;
-}
-
-template<typename T, typename F>
-T binary_search_last(T lo, T hi, F ok) {
-    while (lo < hi) {
-        T mid = lo + (hi - lo + 1) / 2;
-        if (ok(mid)) lo = mid;
-        else hi = mid - 1;
-    }
-    return lo;
-}
-
-// ---------------- SOLVE FUNCTION ----------------
-void solve() {
-    ll n;
-    cin>>n;
-    vector<ll>a(n);
-    for (int i=0;i<n;i++) cin>>a[i];
-
-    for (int i=0;i<n;i++){
-        int sml=0,lg=0;
-        for (int j=i+1;j<n;j++){
-            if (a[i]>a[j]) sml++;
-            else if (a[i]<a[j]) lg++;
+    
+    long long valid_configs = 0;
+    long long less_than_k = 0;
+    
+    // Test all possible global configurations where exactly 'k' robots operate
+    for (long long k = 0; k <= n; ++k) {
+        // A valid state requires exactly k robots to have threshold < k
+        // AND zero robots to have threshold == k.
+        if (less_than_k == k && count[k] == 0) {
+            valid_configs++;
         }
-        int ans=max(sml,lg);
-        cout<<ans<<" ";
+        
+        // Add current threshold frequency to prefix sum for the next k
+        if (k <= n) {
+            less_than_k += count[k];
+        }
     }
-    cout<<"\n";
+    
+    return valid_configs;
 }
 
-// ---------------- MAIN ----------------
+/*
+ * Helper function to run and format test cases cleanly
+ */
+void runTestCase(int testNumber, const vector<int>& input, int expectedOutput) {
+    int actualOutput = getValidConfigurations(input);
+    cout << "Test Case " << testNumber << ": ";
+    
+    if (actualOutput == expectedOutput) {
+        cout << "[PASS]\n";
+    } else {
+        cout << "[FAIL]\n";
+        cout << "  Expected: " << expectedOutput << "\n";
+        cout << "  Actual:   " << actualOutput << "\n";
+    }
+    
+    // Print the array for context (truncated if too long)
+    cout << "  Input: [";
+    for (size_t i = 0; i < input.size(); ++i) {
+        cout << input[i];
+        if (i < input.size() - 1) cout << ", ";
+        if (i >= 9) { cout << "..."; break; } // Truncate long arrays in output
+    }
+    cout << "]\n\n";
+}
+
 int main() {
-    fastio();
-    int t = 1;
-    cin >> t; 
-    while (t--) solve();
+    cout << "--- Running Robot Configuration Tests ---\n\n";
+
+    // Test Case 1: Sample from the Image
+    // Explanation: k=2 and k=5 are the valid configurations.
+    runTestCase(1, {3, 0, 0, 3, 3}, 2);
+
+    // Test Case 2: The Example from the Problem Description
+    // Explanation: k=1, k=4, and k=8 are the valid configurations.
+    runTestCase(2, {6, 0, 3, 3, 6, 7, 2, 7}, 3);
+
+    // Test Case 3: All Zeros Edge Case
+    // Explanation: The only valid configuration is when ALL robots operate (k=N). 
+    // If any are in standby, they malfunction because total operating >= 0.
+    runTestCase(3, {0, 0, 0, 0}, 1);
+
+    // Test Case 4: All Identical Non-Zero Values
+    // Explanation: If thresholds are all 2. 
+    // k=0 is valid (all standby, 0 < 2). 
+    runTestCase(4, {2, 2, 2}, 1);
+
+    // Test Case 5: Custom Array 
+    runTestCase(5, {2, 1, 2, 1}, 2);
+
+    // Test Case 6: Edge Case - Minimum constraints (N=2)
+    runTestCase(6, {1, 1}, 1);
+
+    cout << "--- Testing Complete ---\n";
     return 0;
 }

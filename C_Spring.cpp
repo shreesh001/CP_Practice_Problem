@@ -101,11 +101,36 @@ void solve() {
     common1days-=common2days2;
 
     ansA=common1days*6+(common2days1+common2days2)*3+common3days*2;
-    cout<<ansA<<"\n";
+    cout<<ansA<<" ";
+
+    common1days=m/b;
+    common2days1=m/lcm1;
+    common2days2=m/lcm3;
+    common2days1-=common3days;
+    common2days2-=common3days;
+
+    common1days-=common3days;
+    common1days-=common2days1;
+    common1days-=common2days2;
+
+    ansB=common1days*6+(common2days1+common2days2)*3+common3days*2;
+    cout<<ansB<<" ";
+
+    common1days=m/c;
+    common2days1=m/lcm2;
+    common2days2=m/lcm3;
+    common2days1-=common3days;
+    common2days2-=common3days;
+
+    common1days-=common3days;
+    common1days-=common2days1;
+    common1days-=common2days2;
+
+    ansC=common1days*6+(common2days1+common2days2)*3+common3days*2;
+    cout<<ansC<<"\n";
 
 
 
-    
 }
 
 // ---------------- MAIN ----------------

@@ -78,13 +78,13 @@ void solve() {
     ll n;
     cin>>n;
     vector<ll>a(n),pref(n+1,0);
-    for (int i=0;i<n;i++) {
+    for (ll i=0;i<n;i++) {
         cin>>a[i];
         pref[i+1]=pref[i]+a[i];
     }
     ll maxleftpart=0;
     ll diff=0;
-    for (int i=1;i<=n;i++){
+    for (ll i=1;i<=n;i++){
         ll leftpart=-(i*i)+i+pref[i-1];
         maxleftpart=max(maxleftpart,leftpart);
         ll rightpart=(i*i)+i-pref[i];

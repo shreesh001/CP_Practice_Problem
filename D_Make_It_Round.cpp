@@ -78,19 +78,26 @@ void solve() {
     ll n,m;
     cin>>n>>m;
 
-    ll maxval=n*m;
-    ll ans=maxval;
-    ll num=maxval;
-    ll i=1;
-    while(num>0){
-        ll rem=num%10;
-        rem=rem*i;
-        maxval-=rem;
-        if (maxval!=0 && maxval%n==0) ans=maxval;
-        num=num/10;
-        i=i*10;
+    int num=n;
+    int fact2=0;
+    int fact5=0;
+    while(num%2==0){
+        fact2++;
+        num=num/2;
     }
-    cout<<ans<<"\n";
+    while(num%5==0){
+        fact5+=1;
+        num=num/5;
+    }
+    for (int d=18;d>=0;d--){
+        int need2=max(0,d-fact2);
+        int need5=max(0,d-fact5);
+        ll k=pow(2,need2)*pow(5,need5);
+        if (k>m) continue;
+        ll mulk=m-(m%k);
+    }
+
+    cout<<1ll*n*m<<"\n";
 }
 
 // ---------------- MAIN ----------------

@@ -84,7 +84,6 @@ void solve() {
         cout<<"YES"<<"\n";
         return;
     }
-
     a[0]=min(a[0],m-a[0]);
     for (int i=1;i<n;i++){
         int val1=a[i];

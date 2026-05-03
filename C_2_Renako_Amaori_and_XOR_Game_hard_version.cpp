@@ -93,7 +93,7 @@ void solve() {
     }
     int highbit=0;
     // most signfincant bit in x
-    for (int i=0;i<n;i++){
+    for (int i=0;i<25;i++){
         if (x&(1<<i)) highbit=i;
     }
 

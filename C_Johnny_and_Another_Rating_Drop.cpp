@@ -1,66 +1,93 @@
-#include <iostream>
-#include <vector>
-#include <map>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
 
+// 1. Corrected BFS function
+bool isconnected(int n, const vector<int>& a) {
+    vector<vector<int>> adj(n + 1);
+    for (int i = 0; i < n; i++) {
+        int u = i + 1;      // Current index (1-based)
+        int v = a[i];       // Value pointing to
+        
+        // FIX: Add bidirectional edges
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // BFS initialization
+    vector<int> vis(n + 1, 0);
+    queue<int> q;
+    
+    // Always start BFS from node 1
+    q.push(1);
+    vis[1] = 1;
+    int count = 0;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        count++; // Count visited nodes
+        
+        for (auto v : adj[u]) {
+            if (!vis[v]) {
+                vis[v] = 1;
+                q.push(v);
+            }
+        }
+    }
+
+    // If we visited all N nodes, it is connected
+    return count == n;
+}
+
 void solve() {
-    int N;
-    long long K;
-    if (!(cin >> N >> K)) return;
-
-    vector<int> A(N);
-    map<int, int> freqs;
-    int initial_distinct_count = 0;
-    for (int i = 0; i < N; ++i) {
-        cin >> A[i];
-        if (freqs[A[i]] == 0) {
-            initial_distinct_count++;
-        }
-        freqs[A[i]]++;
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    map<int, int> mpp;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        mpp[a[i]]++;
     }
 
-    // The first element A[0] cannot be changed (no index i < 0).
-    // So the distinct value A[0] will always remain.
-    int fixed_val = A[0];
+    // Optimization: If all elements are the same, it's a star graph (connected).
+    if (mpp.size() == 1) {
+        for (int i = 0; i < n; i++) cout << a[i] << " ";
+        cout << "\n";
+        return;
+    }
 
-    // Collect frequencies of all distinct elements EXCEPT the fixed one.
-    // We want to remove elements with the smallest frequencies first.
-    vector<int> removal_costs;
-    for (auto const& [val, count] : freqs) {
-        if (val != fixed_val) {
-            removal_costs.push_back(count);
+    // STRATEGY 1: Sort and Shift (Your original idea)
+    sort(a.begin(), a.end());
+    vector<int> candidate = a;
+    
+    // Perform Left Shift
+    int first = candidate[0];
+    for(int i=0; i<n-1; i++) candidate[i] = candidate[i+1];
+    candidate[n-1] = first;
+
+    if (isconnected(n, candidate)) {
+        for (int i = 0; i < n; i++) cout << candidate[i] << " ";
+        cout << "\n";
+        return;
+    }
+
+    // STRATEGY 2: Random Shuffle fallback
+    // If Sort+Shift failed (e.g. on input 1 1 2 2), try random shuffles.
+    // 50 attempts is plenty and fits within time limits.
+    int attempts = 50;
+    while(attempts--) {
+        random_shuffle(a.begin(), a.end());
+        if(isconnected(n, a)) {
+            for (int i = 0; i < n; i++) cout << a[i] << " ";
+            cout << "\n";
+            return;
         }
     }
 
-    // Sort costs to remove cheapest distinct elements first (Greedy)
-    sort(removal_costs.begin(), removal_costs.end());
-
-    int removed_distinct = 0;
-    for (int cost : removal_costs) {
-        if (K >= cost) {
-            K -= cost;
-            removed_distinct++;
-        } else {
-            // Cannot afford to remove this distinct element completely
-            break;
-        }
-    }
-
-    cout << initial_distinct_count - removed_distinct << endl;
+    cout << -1 << "\n";
 }
 
 int main() {
-    // Fast I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
-    int T;
-    if (cin >> T) {
-        while (T--) {
-            solve();
-        }
-    }
-    return 0;
-}
+    int

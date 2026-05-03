@@ -98,7 +98,6 @@ void solve() {
         cout << "! 3" << endl; 
         return; 
     }
-
     for (int u = 4; u < 2 * n; u += 2) {
         if (query(u, u + 1) == 1) {
             cout << "! " << u << endl;

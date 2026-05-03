@@ -103,7 +103,6 @@ void solve() {
             mst.insert(max(val,ci));
         }
     }
-    // cout<<kill<<"\n";
     for (int i=0;i<m;i++){
         auto [bi,ci]=vec[i];
         if (ci==0){

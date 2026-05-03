@@ -85,7 +85,7 @@ void solve() {
     for (int i=0;i<n;i++){
         if (power<a[i]) break;
         if (k!=0){
-            int diff=min(k,power-a[i]);
+            ll diff=min(k,power-a[i]);
             power+=diff;
             k-=diff;
         }

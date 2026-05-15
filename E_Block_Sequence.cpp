@@ -74,16 +74,22 @@ T binary_search_last(T lo, T hi, F ok) {
 }
 
 // ---------------- SOLVE FUNCTION ----------------
+ll solve(int ind, vector<ll>&a,int n,vector<ll>&dp){
+    if (ind==n) return 0;
+    if (ind>n) return 1e9;
+    if (dp[ind]!=-1) return dp[ind];
+    ll skip=1+solve(ind+1,a,n,dp);
+    ll take=solve(ind+a[ind]+1,a,n,dp);
+    return dp[ind]=min(skip,take);
+}
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
-    }
-    cout<<(n+m-1)/m<<"\n";
-    
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    vector<ll>dp(n,-1);
+    ll ans=solve(0,a,n,dp);
+    cout<<ans<<"\n";
 }
 
 // ---------------- MAIN ----------------

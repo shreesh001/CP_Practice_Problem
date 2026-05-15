@@ -1,3 +1,4 @@
+//finding the mex
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
@@ -75,22 +76,38 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    ll n,k;
+    cin>>n>>k;
+    vector<ll>a(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    set<int>st;
+    for (int i=0;i<=k;i++) st.insert(i);
+    vector<int>cnt(k,0);
+    for (int i=0;i<k;i++){
+        if (a[i]>=k) continue;
+        cnt[a[i]]++;
+        st.erase(a[i]);
     }
-    cout<<(n+m-1)/m<<"\n";
-    
+    cout<<*st.begin()<<" ";
+    for (int i=k;i<n;i++){
+        //handle erase
+        if (a[i-k]<k){
+            cnt[a[i-k]]--;
+            if (cnt[a[i-k]]==0) st.insert(a[i-k]);
+        }
+        if (a[i]<k){
+            cnt[a[i]]++;
+            st.erase(a[i]);
+        } 
+        cout<<*st.begin()<<" ";
+    }
 }
 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

@@ -75,22 +75,36 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
+    ll n,k;
+    cin>>n>>k;
 
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
-    }
-    cout<<(n+m-1)/m<<"\n";
+    ll x1,a,b,c;
+    cin>>x1>>a>>b>>c;
     
+    vector<ll>arr(n,0);
+    arr[0]=x1;
+    for (int i=1;i<n;i++){
+        arr[i]=(a*arr[i-1]+b)%c;
+    }
+
+    ll sum=0;
+    for (int i=0;i<k;i++){
+        sum+=arr[i];
+    }
+    ll ans=sum;
+    for (int i=k;i<n;i++){
+        sum-=arr[i-k];
+        sum+=arr[i];
+        ans=ans^sum;
+    }
+    cout<<ans<<"\n";
 }
 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

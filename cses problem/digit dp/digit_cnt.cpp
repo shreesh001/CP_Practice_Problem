@@ -100,7 +100,6 @@ void solve() {
     ll ans=high-lower;
     cout<<ans<<"\n";
 }
-
 // ---------------- MAIN ----------------
 int main() {
     fastio();

@@ -75,15 +75,48 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    ll n;
+    cin>>n;
+    string s;
+    vector<ll>a(n);
+    for (int i=0;i<n;i++) cin>>a[i];
+    cin>>s;
+    int xor0=0,xor1=0;
+    for (int i=0;i<n;i++){
+        if (s[i]=='1') xor1^=a[i];
+        else xor0^=a[i];
     }
-    cout<<(n+m-1)/m<<"\n";
-    
+
+    vector<ll>x(n+1,0);
+    x[1]=a[0];
+    for (int i=2;i<=n;i++){
+        x[i]=x[i-1]^a[i-1];
+    }
+
+    int q;
+    cin>>q;
+    while(q--){
+        int type;
+        cin>>type;
+        if (type==1){
+            int l,r;
+            cin>>l>>r;
+            int val=x[r]^x[l-1];
+            xor0^=val;
+            xor1^=val;
+        }
+        else{
+            int g;
+            cin>>g;
+            if (g==0){
+                cout<<xor0<<" ";
+            }
+            else{
+                cout<<xor1<<" ";
+            }
+        }
+    }
+    cout<<endl;
 }
 
 // ---------------- MAIN ----------------

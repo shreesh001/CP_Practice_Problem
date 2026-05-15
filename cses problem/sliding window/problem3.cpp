@@ -1,3 +1,4 @@
+//most frequent el
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
@@ -75,14 +76,37 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
+    ll n,k;
+    cin>>n>>k;
+    vector<ll>nums(n);
+    for (int i=0;i<n;i++) cin>>nums[i];
 
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    unordered_map<int,int>mpp;
+    map<int,set<int>>freq;
+
+    for (int i=0;i<k;i++){
+        freq[mpp[nums[i]]].erase(nums[i]);
+        if (freq[mpp[nums[i]]].empty()) freq.erase(mpp[nums[i]]);
+        mpp[nums[i]]++;
+        freq[mpp[nums[i]]].insert(nums[i]);
     }
-    cout<<(n+m-1)/m<<"\n";
+    auto it = prev(freq.end());
+    cout<<*(it->second.begin())<<" ";
+
+    for (int i=k;i<n;i++){
+        freq[mpp[nums[i-k]]].erase(nums[i-k]);
+        if (freq[mpp[nums[i-k]]].empty()) freq.erase(mpp[nums[i-k]]);
+        mpp[nums[i-k]]--;
+        if (mpp[nums[i-k]]>0) freq[mpp[nums[i-k]]].insert(nums[i-k]);
+
+        freq[mpp[nums[i]]].erase(nums[i]);
+        if (freq[mpp[nums[i]]].empty()) freq.erase(mpp[nums[i]]);
+        mpp[nums[i]]++;
+        freq[mpp[nums[i]]].insert(nums[i]);
+        auto it=prev(freq.end());
+        cout<<*(it->second.begin())<<" ";
+    }
+
     
 }
 
@@ -90,7 +114,7 @@ void solve() {
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

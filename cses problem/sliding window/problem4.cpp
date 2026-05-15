@@ -1,3 +1,4 @@
+// sliding window minimum
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
@@ -75,14 +76,31 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    ll n,k;
+    cin>>n>>k;
+    ll x,a,b,c;
+    cin>>x>>a>>b>>c;
+    vector<ll>nums(n,0);
+    nums[0]=x;
+    for (int i=1;i<n;i++){
+        nums[i]=(a*nums[i-1]+b)%c;
     }
-    cout<<(n+m-1)/m<<"\n";
+
+    int res=0;
+    deque<ll>dq;
+    for (int i=0;i<n;i++){
+        while (!dq.empty() && dq.front()<=i-k){
+            dq.pop_front();
+        }
+        while (!dq.empty() && nums[dq.back()]>=nums[i]){
+            dq.pop_back();
+        }
+        dq.push_back(i);
+        if (i>=k-1){
+            res=(res^nums[dq.front()]);
+        }
+    }
+    cout<<res<<"\n";
     
 }
 
@@ -90,7 +108,7 @@ void solve() {
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

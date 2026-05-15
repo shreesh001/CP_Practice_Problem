@@ -75,15 +75,29 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
-
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    ll n;
+    cin>>n;
+    vector<ll>a(n);
+    ll sum=0;
+    for (int i=0;i<n;i++) {
+        cin>>a[i];
+        sum+=a[i];
     }
-    cout<<(n+m-1)/m<<"\n";
-    
+    sort(a.begin(),a.end());
+    ll moves=(sum+1)/2;
+    sum+=1;
+    sum/=2;
+    for (int i=0;i<n;i++){
+        if (sum>=a[i]){
+            sum-=a[i];
+        }else if (sum>0){
+            sum=0;
+            moves+=1;
+        }else{
+            moves+=1;
+        }
+    }
+    cout<<moves<<"\n";
 }
 
 // ---------------- MAIN ----------------

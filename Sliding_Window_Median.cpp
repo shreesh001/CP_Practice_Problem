@@ -75,22 +75,73 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
+    ll n,k;
+    cin>>n>>k;
+    vector<ll>nums(n);
+    for (int i=0;i<n;i++) cin>>nums[i];
 
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    int ls=k/2;
+    int rs=k/2;
+    if (k%2==1) ls+=1;
+
+    multiset<ll>left,right;
+    //first window
+    for (int i=0;i<k;i++){
+        if (left.empty()){
+            left.insert(nums[i]);
+        }
+        else if (*prev(left.end())<=nums[i]){
+            right.insert(nums[i]);
+            if (right.size()>rs){
+                left.insert(*(right.begin()));
+                right.erase((right.begin()));
+            }
+        }
+        else{
+            left.insert(nums[i]);
+            if (left.size()>ls){
+                right.insert(*prev(left.end()));
+                left.erase(prev(left.end()));
+            }
+        }
     }
-    cout<<(n+m-1)/m<<"\n";
-    
+    cout<<(*prev(left.end()))<<" ";
+
+    for (int i=k;i<n;i++){
+        if (left.find(nums[i-k])!=left.end()){
+            left.erase(left.find(nums[i-k]));
+        }
+        else{
+            right.erase(right.find(nums[i-k]));
+        }
+
+        if (left.empty()){
+            left.insert(nums[i]);
+        }
+        else if (*prev(left.end())<=nums[i]){
+            right.insert(nums[i]);
+            if (right.size()>rs){
+                left.insert(*(right.begin()));
+                right.erase((right.begin()));
+            }
+        }
+        else{
+            left.insert(nums[i]);
+            if (left.size()>ls){
+                right.insert(*prev(left.end()));
+                left.erase(prev(left.end()));
+            }
+        }
+        cout<<(*prev(left.end()))<<" ";
+    }
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
     int t = 1;
-    cin >> t; 
+    //cin >> t; 
     while (t--) solve();
     return 0;
 }

@@ -1,12 +1,14 @@
 #pragma GCC optimize("O3,unroll-loops")
 #include <iostream>
 #include <vector>
-#include <string>
 
 using namespace std;
 
 /*
- * Optimized O(N) solution to find valid robot configurations.
+ * Complete the 'getValidConfigurations' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts INTEGER_ARRAY coordinationThreshold as parameter.
  */
 int getValidConfigurations(vector<int> coordinationThreshold) {
     long long n = coordinationThreshold.size();
@@ -39,58 +41,25 @@ int getValidConfigurations(vector<int> coordinationThreshold) {
     return valid_configs;
 }
 
-/*
- * Helper function to run and format test cases cleanly
- */
-void runTestCase(int testNumber, const vector<int>& input, int expectedOutput) {
-    int actualOutput = getValidConfigurations(input);
-    cout << "Test Case " << testNumber << ": ";
-    
-    if (actualOutput == expectedOutput) {
-        cout << "[PASS]\n";
-    } else {
-        cout << "[FAIL]\n";
-        cout << "  Expected: " << expectedOutput << "\n";
-        cout << "  Actual:   " << actualOutput << "\n";
-    }
-    
-    // Print the array for context (truncated if too long)
-    cout << "  Input: [";
-    for (size_t i = 0; i < input.size(); ++i) {
-        cout << input[i];
-        if (i < input.size() - 1) cout << ", ";
-        if (i >= 9) { cout << "..."; break; } // Truncate long arrays in output
-    }
-    cout << "]\n\n";
-}
-
 int main() {
-    cout << "--- Running Robot Configuration Tests ---\n\n";
+    // Fast I/O for competitive programming
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-    // Test Case 1: Sample from the Image
-    // Explanation: k=2 and k=5 are the valid configurations.
-    runTestCase(1, {3, 0, 0, 3, 3}, 2);
+    int n;
+    // Read the number of elements
+    if (cin >> n) {
+        vector<int> coordinationThreshold(n);
+        
+        // Read the array elements
+        for (int i = 0; i < n; ++i) {
+            cin >> coordinationThreshold[i];
+        }
 
-    // Test Case 2: The Example from the Problem Description
-    // Explanation: k=1, k=4, and k=8 are the valid configurations.
-    runTestCase(2, {6, 0, 3, 3, 6, 7, 2, 7}, 3);
+        // Execute the optimal algorithm and print the result
+        int result = getValidConfigurations(coordinationThreshold);
+        cout << result << "\n";
+    }
 
-    // Test Case 3: All Zeros Edge Case
-    // Explanation: The only valid configuration is when ALL robots operate (k=N). 
-    // If any are in standby, they malfunction because total operating >= 0.
-    runTestCase(3, {0, 0, 0, 0}, 1);
-
-    // Test Case 4: All Identical Non-Zero Values
-    // Explanation: If thresholds are all 2. 
-    // k=0 is valid (all standby, 0 < 2). 
-    runTestCase(4, {2, 2, 2}, 1);
-
-    // Test Case 5: Custom Array 
-    runTestCase(5, {2, 1, 2, 1}, 2);
-
-    // Test Case 6: Edge Case - Minimum constraints (N=2)
-    runTestCase(6, {1, 1}, 1);
-
-    cout << "--- Testing Complete ---\n";
     return 0;
 }

@@ -75,15 +75,33 @@ T binary_search_last(T lo, T hi, F ok) {
 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
-    ll n,m;
-    cin>>n>>m;
+    ll n;
+    cin>>n;
+    vector<ll>a(n+1),b(n+1),pref(n+1),full(n+2,0),part(n+2,0);
+    for (int i=1;i<=n;i++) cin>>a[i];
+    for (int i=1;i<=n;i++) cin>>b[i];
 
-    if ((n%2==1 && m%2==0)|| m>n){
-        cout<<-1<<"\n";
-        return;
+    for (int i=1;i<=n;i++){
+        pref[i]=pref[i-1]+b[i];
     }
-    cout<<(n+m-1)/m<<"\n";
-    
+
+    for (int i=1;i<=n;i++){
+        ll sum=a[i]+pref[i-1];
+        int j=upper_bound(pref.begin()+i,pref.end(),sum)-pref.begin();
+        full[i]+=1;
+        full[j]-=1;
+        part[j]+=(a[i]-pref[j-1]+pref[i-1]);
+    }
+    ll cum=0;
+    for (int i=1;i<=n;i++){
+        full[i]+=cum;
+        cum=full[i];
+    }
+    for (int i=1;i<=n;i++){
+        ll ans=full[i]*b[i]+part[i];
+        cout<<ans<<" ";
+    }
+    cout<<"\n";
 }
 
 // ---------------- MAIN ----------------

@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 #include <iostream>
 using namespace std;
-
+ 
 using ll = long long;
 using ld = long double;
-
+ 
 // ---------------- TYPE SHORTCUTS ----------------
 using pii = pair<int,int>;
 using pll = pair<ll,ll>;
@@ -12,7 +12,7 @@ using vpi = vector<pii>;
 using vpl = vector<pll>;
 using umll = unordered_map<ll,ll>;
 using umii = unordered_map<int,int>;
-
+ 
 #define mp make_pair
 #define pb push_back
 #define ff first
@@ -20,7 +20,7 @@ using umii = unordered_map<int,int>;
 #define all(v) (v).begin(), (v).end()
 #define rall(v) (v).rbegin(), (v).rend()
 #define fastio() ios::sync_with_stdio(false); cin.tie(nullptr);
-
+ 
 // ---------------- DEBUG (disabled in judge) ----------------
 #ifndef ONLINE_JUDGE
     #define debug(x) cerr << #x << " = " << x << "\n";
@@ -29,14 +29,14 @@ using umii = unordered_map<int,int>;
     #define debug(x)
     #define debugv(v)
 #endif
-
+ 
 // ---------------- MODULAR UTILITIES ----------------
 const ll MOD = 1e9 + 7;
 ll addmod(ll a, ll b) { a %= MOD; b %= MOD; return (a + b + MOD) % MOD; }
 ll mulmod(ll a, ll b) { return (a % MOD) * (b % MOD) % MOD; }
 ll powmod(ll a, ll b) { ll r = 1; while (b) { if (b & 1) r = mulmod(r, a); a = mulmod(a, a); b >>= 1; } return r; }
 ll invmod(ll a) { return powmod(a, MOD - 2); }
-
+ 
 // ---------------- DISJOINT SET UNION (DSU) ----------------
 struct DSU {
     vector<int> parent, sz;
@@ -51,7 +51,7 @@ struct DSU {
         }
     }
 };
-
+ 
 // ---------------- BINARY SEARCH HELPERS ----------------
 template<typename T, typename F>
 T binary_search_first(T lo, T hi, F ok) {
@@ -62,7 +62,7 @@ T binary_search_first(T lo, T hi, F ok) {
     }
     return lo;
 }
-
+ 
 template<typename T, typename F>
 T binary_search_last(T lo, T hi, F ok) {
     while (lo < hi) {
@@ -72,41 +72,38 @@ T binary_search_last(T lo, T hi, F ok) {
     }
     return lo;
 }
-
+ 
 // ---------------- SOLVE FUNCTION ----------------
 void solve() {
     ll n,k;
     cin>>n>>k;
     vector<ll>nums(n);
     for (int i=0;i<n;i++) cin>>nums[i];
-
+ 
     int ls=k/2;
     int rs=k/2;
     if (k%2==1) ls+=1;
-
+ 
     multiset<ll>left,right;
     //first window
     for (int i=0;i<k;i++){
-        if (left.empty()){
-            left.insert(nums[i]);
-        }
-        else if (*prev(left.end())<=nums[i]){
-            right.insert(nums[i]);
-            if (right.size()>rs){
-                left.insert(*(right.begin()));
-                right.erase((right.begin()));
-            }
-        }
-        else{
+        if (right.empty() || nums[i] <= *right.begin()) {
             left.insert(nums[i]);
             if (left.size()>ls){
                 right.insert(*prev(left.end()));
                 left.erase(prev(left.end()));
             }
         }
+        else {
+            right.insert(nums[i]);
+            if (right.size()>rs){
+                left.insert(*(right.begin()));
+                right.erase(right.begin());
+            }
+        }
     }
     cout<<(*prev(left.end()))<<" ";
-
+ 
     for (int i=k;i<n;i++){
         if (left.find(nums[i-k])!=left.end()){
             left.erase(left.find(nums[i-k]));
@@ -114,29 +111,26 @@ void solve() {
         else{
             right.erase(right.find(nums[i-k]));
         }
-
-        if (left.empty()){
-            left.insert(nums[i]);
-        }
-        else if (*prev(left.end())<=nums[i]){
-            right.insert(nums[i]);
-            if (right.size()>rs){
-                left.insert(*(right.begin()));
-                right.erase((right.begin()));
-            }
-        }
-        else{
+ 
+        if (right.empty() || nums[i] <= *right.begin()) {
             left.insert(nums[i]);
             if (left.size()>ls){
                 right.insert(*prev(left.end()));
                 left.erase(prev(left.end()));
             }
         }
+        else {
+            right.insert(nums[i]);
+            if (right.size()>rs){
+                left.insert(*(right.begin()));
+                right.erase(right.begin());
+            }
+        }
         cout<<(*prev(left.end()))<<" ";
     }
     cout<<"\n";
 }
-
+ 
 // ---------------- MAIN ----------------
 int main() {
     fastio();
@@ -144,4 +138,3 @@ int main() {
     //cin >> t; 
     while (t--) solve();
     return 0;
-}
